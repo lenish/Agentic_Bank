@@ -16,12 +16,19 @@ import { PaymentPipeline } from "./pipeline";
 // Gateway configuration
 // ---------------------------------------------------------------------------
 
+export interface DecisionLookup {
+  getById(id: string): Record<string, unknown> | undefined;
+  filterByRole(
+    record: Record<string, unknown>,
+    role: string,
+  ): Record<string, unknown>;
+}
+
 export interface GatewayOptions {
-  /** Capability lookup (inject CapabilityTokenService or a mock). */
   readonly capabilityLookup: CapabilityLookup;
-  /** Optional rate-limit overrides. */
   readonly rateLimitOptions?: RateLimitOptions;
   readonly paymentPipeline?: PaymentPipeline;
+  readonly decisionLookup?: DecisionLookup;
 }
 
 // ---------------------------------------------------------------------------
@@ -89,6 +96,23 @@ export function createGateway(options: GatewayOptions): Hono {
   );
 
   app.get("/api/v1/decisions", (c) => c.json({ decisions: [] }));
+
+  app.get("/api/v1/decisions/:id", (c) => {
+    const lookup = options.decisionLookup;
+    if (!lookup) {
+      return c.json({ error: "DECISION_LOOKUP_NOT_CONFIGURED" }, 501);
+    }
+
+    const id = c.req.param("id");
+    const record = lookup.getById(id);
+    if (!record) {
+      return c.json({ error: "DECISION_NOT_FOUND" }, 404);
+    }
+
+    const role = c.req.header("X-Audit-Role") ?? "OPERATOR";
+    const filtered = lookup.filterByRole(record, role);
+    return c.json(filtered);
+  });
 
   // ── Auth + capability routes ────────────────────────────────────────
   const cap = capabilityMiddleware(options.capabilityLookup);

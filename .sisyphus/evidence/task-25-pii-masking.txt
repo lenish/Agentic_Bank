@@ -1,0 +1,67 @@
+Task 25: PII Masking, Access Control, and Data Governance — Evidence
+=====================================================================
+
+## Test Results (78 pass, 0 fail — 55 existing + 23 new)
+
+PiiMasker tests:
+  ✓ maskName: 'John Doe' → 'J*** D**'
+  ✓ maskName: single character name preserved
+  ✓ maskName: empty string returns empty
+  ✓ maskAccountNumber: '1234567890' → '******7890'
+  ✓ maskAccountNumber: short account (≤4 digits) returns original
+  ✓ maskAddress: '123 Orchard Road' → '*** Orchard Road'
+  ✓ maskAddress: no leading digits returns unchanged
+  ✓ maskLogString: masks account-like numbers in log text
+
+DataClassificationService tests:
+  ✓ classify: 'customer_name' → RESTRICTED
+  ✓ classify: 'account_number' → RESTRICTED
+  ✓ classify: 'balance_sgd_cents' → CONFIDENTIAL
+  ✓ classify: 'agent_id' → INTERNAL
+  ✓ classify: 'currency' → PUBLIC
+  ✓ classifyRecord: classifies all fields of a record
+
+AuditAccessControl tests:
+  ✓ OPERATOR: sees masked PII in decision record
+  ✓ AUDITOR: sees full unmasked data
+  ✓ ADMIN: sees full unmasked data
+  ✓ OPERATOR: override_actor is masked when present
+  ✓ hasFullAccess: OPERATOR → false, AUDITOR → true, ADMIN → true
+
+DataRetentionConfig tests:
+  ✓ decision records retained for 7 years
+  ✓ logs retained for 2 years
+
+PDPA_CHECKLIST tests:
+  ✓ is a non-empty readonly array
+  ✓ includes consent and DPO requirements
+
+## PII Masking Evidence — No Plaintext PII in Masked Output
+
+Masker input/output examples:
+  Name:    "John Doe"       → "J*** D**"         (no plaintext name)
+  Account: "1234567890"     → "******7890"        (only last 4 digits)
+  Address: "123 Orchard Road" → "*** Orchard Road" (number masked)
+  Log:     "Transfer to account 1234567890 completed"
+         → "Transfer to account ******7890 completed"
+
+OPERATOR role access:
+  input_snapshot.customer_name    → "J*** D**"       (masked)
+  input_snapshot.account_number   → "******7890"     (masked)
+  input_snapshot.address          → "*** Orchard Road" (masked)
+  input_snapshot.currency         → "SGD"            (unmasked — PUBLIC)
+
+AUDITOR/ADMIN role access:
+  All fields returned unmasked (full access for compliance investigations)
+
+## Build Verification
+
+@aoa/compliance:build  — exit 0 (tsc --emitDeclarationOnly passed)
+@aoa/api-gateway:build — exit 0 (tsc --emitDeclarationOnly passed)
+
+## Files Modified
+
+- packages/compliance/src/privacy.ts        (NEW)
+- packages/compliance/src/privacy.test.ts   (NEW)
+- packages/compliance/src/index.ts          (updated exports)
+- packages/api-gateway/src/gateway.ts       (added GET /api/v1/decisions/:id)

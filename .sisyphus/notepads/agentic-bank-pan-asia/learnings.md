@@ -247,3 +247,12 @@
 - `toFixed(2)` does NOT add thousand separators — use `toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })` for "1,234.56" format.
 - 15 new tests (10 SlackBotHandler + 5 SlackWorkspaceRegistry), total messenger-bot: 38 tests.
 - createMessengerBotApp() now accepts optional SlackWorkspaceRegistry and sets up both Telegram and Slack routes.
+
+## [2026-03-12] T25: Privacy & Data Governance
+- PII masking approach: regex-based pattern matching for names, accounts, addresses — no ML needed for MVP
+- Data classification uses field-name pattern matching (contains "name" → RESTRICTED, "amount" → CONFIDENTIAL, etc.)
+- Gateway cross-package dependency avoided: used `DecisionLookup` interface injection instead of importing `@aoa/compliance` directly
+- Role-based access via `X-Audit-Role` header: OPERATOR gets masked, AUDITOR/ADMIN get full data
+- PDPA checklist: 13 items covering Singapore's Personal Data Protection Act requirements
+- DataRetentionConfig as `as const` object — immutable at TypeScript level
+- Compliance package now at 78 tests (55 existing + 23 new privacy tests)

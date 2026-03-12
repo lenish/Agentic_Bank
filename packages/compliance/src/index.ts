@@ -36,3 +36,13 @@ export type {
   DisputeResolution,
   CreateDisputeInput,
 } from "./dispute";
+
+// Privacy & Data Governance — PII masking, classification, audit access
+export {
+  PiiMasker,
+  DataClassificationService,
+  AuditAccessControl,
+  DataRetentionConfig,
+  PDPA_CHECKLIST,
+} from "./privacy";
+export type { DataClassification, AuditRole } from "./privacy";
