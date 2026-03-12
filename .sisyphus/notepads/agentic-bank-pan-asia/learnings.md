@@ -160,3 +160,16 @@
 - Rail adapter returns discriminated union results: success types (PENDING, SETTLED, REFUNDED) vs RailFailureResult { status: 'FAILED', reason: string }. No exceptions for expected failures.
 - State machine stores full transition history with metadata (action type, escrow condition details) for audit trail.
 - 19 new tests added (total 44 in settlement package). Tests cover all 3 QA scenarios from plan.
+
+## [2026-03-12] Task 15 — Telegram Bot MVP
+- Implemented TelegramBotHandler with webhook support for Telegram updates.
+- IntentParser recognizes 6 intent types: BALANCE_QUERY, PAYMENT, POLICY_QUERY, HISTORY, AGENT_STATUS, UNKNOWN.
+- Payment parsing extracts amount (SGD → cents) and counterparty via regex: `(?:pay|send)\s+(\d+)\s*(?:sgd|dollars?)?\s+(?:to|from)\s+([a-z0-9\-_]+)`.
+- PipelineDisplay formats 5-stage OMO-style pipeline with Unicode symbols: ✅ DONE, ⏳ RUNNING, ⬜ PENDING, ❌ ERROR.
+- UserRegistry uses in-memory Map for Telegram user_id ↔ AOA account_id mapping (Phase 1 only).
+- Hono webhook route: POST /api/v1/telegram/webhook accepts TelegramUpdate JSON, returns TelegramResponse.
+- Mock responses: balance (SGD 1,234.56), payment (5-stage pipeline with realistic timings), policy/history/status (mock data).
+- 23 comprehensive tests (8 TelegramBotHandler, 6 IntentParser, 3 PipelineDisplay, 5 UserRegistry, 1 placeholder).
+- Build: 54.53 KB bundled, 29 modules, tsc clean.
+- No external API calls (webhook handler only per requirements).
+- No `any` types (strict mode).

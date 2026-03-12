@@ -245,7 +245,7 @@ Max Concurrent: 8 (Wave 1)
 
 ### Wave 1: Foundation + Entity (Month 0-2)
 
-- [ ] 1. Operating Charter (joint with SC Ventures)
+- [x] 1. Operating Charter (joint with SC Ventures)
 
   **What to do**:
   - Draft 1-page Operating Charter: roles/DRI/decision rights/KPIs/escalation triggers
@@ -296,7 +296,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-1: docs(governance): add operating charter for SCV partnership`
 
-- [ ] 2. Entity incorporation + MAS sandbox preparation
+- [x] 2. Entity incorporation + MAS sandbox preparation
 
   **What to do**:
   - Compile Singapore entity incorporation requirements (ACRA registration, director requirements, capital)
@@ -346,7 +346,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-2: docs(regulatory): MAS sandbox requirements and entity structure`
 
-- [ ] 3. Project scaffolding + monorepo + CI/CD
+- [x] 3. Project scaffolding + monorepo + CI/CD
 
   **What to do**:
   - Monorepo setup (Turborepo or nx)
@@ -405,7 +405,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-3: feat(scaffold): monorepo setup with CI/CD and dev environment`
 
-- [ ] 4. Type definitions + API schema (OpenAPI)
+- [x] 4. Type definitions + API schema (OpenAPI)
 
   **What to do**:
   - Shared type definitions (`packages/shared-types`): Agent, Account, Policy, Transaction, DecisionRecord, Capability, DisputeCase
@@ -457,7 +457,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-4: feat(types): shared type definitions and OpenAPI v1 schema`
 
-- [ ] 5. Double-entry ledger core + account model
+- [x] 5. Double-entry ledger core + account model
 
   **What to do**:
   - Double-entry ledger service: all fund movements recorded as debit/credit pairs
@@ -518,7 +518,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-5: feat(ledger): double-entry ledger core with state machine`
 
-- [ ] 6. KYA identity service (SPIFFE ID + OAuth mTLS)
+- [x] 6. KYA identity service (SPIFFE ID + OAuth mTLS)
 
   **What to do**:
   - SPIFFE ID issuance/revocation automation (agent workload identity)
@@ -572,7 +572,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-6: feat(kya): agent identity service with SPIFFE and mTLS`
 
-- [ ] 7. Capability token mint/revoke/verify
+- [x] 7. Capability token mint/revoke/verify
 
   **What to do**:
   - Capability token issuance API: principal, agent_id, action_set, amount_limit, counterparty_scope, ttl, max_frequency, revocable
@@ -632,7 +632,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-7: feat(capability): delegation token service with hard bounds`
 
-- [ ] 8. Decision record storage + query API
+- [x] 8. Decision record storage + query API
 
   **What to do**:
   - Immutable decision record storage (append-only, no modification/deletion)
@@ -686,7 +686,7 @@ Max Concurrent: 8 (Wave 1)
 
 ### Wave 2: Core Modules (Month 2-5)
 
-- [ ] 9. Policy engine (OPA/Cedar, deny-by-default)
+- [x] 9. Policy engine (OPA/Cedar, deny-by-default)
 
   **What to do**:
   - OPA or Cedar-based PDP (Policy Decision Point) service
@@ -746,7 +746,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-9: feat(policy): OPA/Cedar policy engine with deny-by-default`
 
-- [ ] 10. Agent wallet/sub-account service
+- [x] 10. Agent wallet/sub-account service
 
   **What to do**:
   - Per-agent sub-account CRUD API (create/query/freeze/unfreeze)
@@ -789,7 +789,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-10: feat(wallet): agent sub-account service with purpose-bound limits`
 
-- [ ] 11. Signing service (HSM/KMS integration)
+- [x] 11. Signing service (HSM/KMS integration)
 
   **What to do**:
   - HSM/KMS-based signing service (AWS KMS or HashiCorp Vault Transit)
@@ -843,7 +843,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-11: feat(signing): HSM/KMS signing service with policy-gated operations`
 
-- [ ] 12. Pre-trade risk rules engine (top-15 rules)
+- [x] 12. Pre-trade risk rules engine (top-15 rules)
 
   **What to do**:
   - Online risk API (synchronous, p95 < 100ms)
@@ -884,7 +884,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-12: feat(risk): pre-trade risk rules engine with 15 rules`
 
-- [ ] 13. Idempotency + outbox + saga orchestrator
+- [x] 13. Idempotency + outbox + saga orchestrator
 
   **What to do**:
   - Canonical request_id + semantic hash at ingress
@@ -937,7 +937,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-13: feat(settlement): idempotency + outbox + saga orchestration`
 
-- [ ] 14. Settlement state machine (SGD rail adapter)
+- [x] 14. Settlement state machine (SGD rail adapter)
 
   **What to do**:
   - State machine: INITIATED → AUTHORIZED → HELD → RELEASING → SETTLED / REFUNDED
@@ -1056,7 +1056,7 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-15: feat(messenger): Telegram bot with OMO-style pipeline viz`
 
-- [ ] 16. AOA API gateway + auth middleware
+- [x] 16. AOA API gateway + auth middleware
 
   **What to do**:
   - API gateway: rate limiting, request validation, auth, routing

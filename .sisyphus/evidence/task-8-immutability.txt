@@ -1,0 +1,20 @@
+=== Task 8: Immutable Decision Record ===
+
+--- Test Output ---
+bun test v1.3.10 (30e609e0)
+
+--- Typecheck ---
+typecheck: PASS (no errors)
+
+--- Build ---
+Bundled 3 modules in 5ms
+
+  index.js  2.1 KB  (entry point)
+
+
+--- Immutability Verification ---
+1. DecisionRecordService has NO update/delete/remove/modify/patch methods
+2. DecisionStore interface exposes only append/getById/getAll
+3. All DecisionRecord fields are readonly
+4. Records are Object.freeze()d in store
+5. Input arrays/objects are defensively copied
