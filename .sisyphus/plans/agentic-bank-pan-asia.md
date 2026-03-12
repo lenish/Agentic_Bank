@@ -158,6 +158,16 @@ Wave 2 (Month 2-5 — Core Modules, MAX PARALLEL):
 ├── Task 16: AOA API gateway + auth middleware [unspecified-high]
 └── Task 17: Intent pipeline visualization (OMO-style) [visual-engineering]
 
+Wave B (Month 4-6 — Blockchain Infra + Dual-Rail, NEW):
+├── Task B1: Rail-aware 계약 일반화 [deep]
+├── Task B2: Settlement adapter 추상화 [deep]
+├── Task B3: Stablecoin rail adapter skeleton [deep]
+├── Task B4: Signing port 도입 (KMS/MPC) [deep]
+├── Task B5: Async finality / reorg 상태 모델 [deep]
+├── Task B6: Ledger multi-asset 확장 [deep]
+├── Task B7: Idempotency 상태전이 + audit 확장/redaction [deep]
+└── Task B8: Plan/docs 정합성 업데이트 [writing]
+
 Wave 3 (Month 5-8 — Integration + Compliance + UX):
 ├── Task 18: E2E settlement flow integration [deep]
 ├── Task 19: AML rule engine v1 (Osprey-based) [unspecified-high]
@@ -185,7 +195,7 @@ Wave FINAL (After ALL — Independent Review):
 ├── Task F3: E2E QA — full customer journey (unspecified-high)
 └── Task F4: Scope fidelity check (deep)
 
-Critical Path: T3 → T5 → T7 → T9 → T13 → T18 → T22 → T29 → F1-F4
+Critical Path: T3 → T5 → T7 → T9 → T13 → B1 → B2 → B3 → B5 → B7 → T18 → T22 → T29 → F1-F4
 Parallel Speedup: ~60% faster than sequential
 Max Concurrent: 8 (Wave 1)
 ```
@@ -228,6 +238,14 @@ Max Concurrent: 8 (Wave 1)
 | 32 | — | 29 |
 | 33 | 18 | 29 |
 | 34 | 5, 10 | 29 |
+| B1 | T14, T16 | B2, B3, B5, B6 |
+| B2 | B1 | B3 |
+| B3 | B2 | B5 |
+| B4 | B1 | B5 |
+| B5 | B3, B4 | B7 |
+| B6 | B1 | B7 |
+| B7 | B5, B6 | B8, T18 |
+| B8 | B7 | T18 |
 
 ### Agent Dispatch Summary
 
@@ -235,6 +253,7 @@ Max Concurrent: 8 (Wave 1)
 |------|-------|-----------|
 | 1 | 8 | T1→writing, T2→unspecified-high, T3-4→quick, T5-7→deep, T8→unspecified-high |
 | 2 | 9 | T9,11-13→deep, T10,14,16→unspecified-high, T15→quick, T17→visual-engineering |
+| B | 8 | B1-B7→deep, B8→writing |
 | 3 | 9 | T18,22→deep, T19-21,25→unspecified-high, T23-24→visual-engineering, T26→quick |
 | 4 | 8 | T27,33→writing, T28-29,34→unspecified-high, T30-31→deep, T32→visual-engineering |
 | FINAL | 4 | F1→oracle, F2-F3→unspecified-high, F4→deep |
@@ -1160,6 +1179,241 @@ Max Concurrent: 8 (Wave 1)
 
 ---
 
+### Wave B: Blockchain Infra + Dual-Rail (Month 4-6 — NEW)
+
+> **Added**: March 2026 — Investment memo updated with 8-layer stack (Blockchain Infra + Stablecoin Settlement).
+> **Phase 1 Scope**: SGD domestic + USDC/USDT stablecoin only (per guardrails).
+> **Prerequisite**: Wave 2 core modules complete. **Unblocks**: Wave 3 E2E integration.
+
+- [ ] B1. Rail-aware 계약 일반화 (Backward Compatible)
+
+  **What to do**:
+  - `PaymentRequest`에 `asset_code`, `amount_minor`, `rail` 필드 추가
+  - 기존 `amount_sgd_cents` 입력 backward-compat 파싱 유지
+  - `PaymentResult.status`에 async-friendly 상태(`PENDING_CONFIRMATION`) 추가
+
+  **Must NOT do**:
+  - 기존 SGD 플로우 깨지 않을 것
+  - `amount_sgd_cents` 필드 당장 삭제하지 않을 것 (deprecation 마킹만)
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: NO (Wave B entry point)
+  - **Blocks**: B2, B3, B5, B6
+  - **Blocked By**: T14, T16
+
+  **Acceptance Criteria**:
+  - [ ] 기존 SGD API 요청 동일 동작 (회귀)
+  - [ ] 신규 rail-aware 타입 컴파일 성공
+  - [ ] `pipeline.test.ts` 전체 green
+
+  **Commit**: YES
+  - Message: `task-b1: feat(pipeline): rail-aware payment contract with backward compatibility`
+
+- [ ] B2. Settlement Adapter 추상화 (Rail-agnostic Port)
+
+  **What to do**:
+  - `RailAdapter` 인터페이스를 일반화된 `SettlementInstruction` 기반으로 개편
+  - `SgdRailAdapter`를 신규 인터페이스 구현체로 리팩터
+  - `server.ts`에서 rail별 adapter 주입 경로 마련
+
+  **Must NOT do**:
+  - SGD adapter 동작 변경 금지 (인터페이스만 맞춤)
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: NO
+  - **Blocks**: B3
+  - **Blocked By**: B1
+
+  **Acceptance Criteria**:
+  - [ ] SGD-only 경로 동작 동일
+  - [ ] adapter swap 시 pipeline 코드 변경 0
+  - [ ] 빌드/테스트 green
+
+  **Commit**: YES
+  - Message: `task-b2: refactor(settlement): rail-agnostic adapter port`
+
+- [ ] B3. Stablecoin Rail Adapter Skeleton
+
+  **What to do**:
+  - `StablecoinRailAdapter` 스켈레톤 추가 (submit/confirm/refund)
+  - `reference_id` ↔ custody tx id 매핑 구조 정의
+  - Feature flag (`STABLECOIN_ENABLED`) 기반 활성화
+  - Mock integration test
+
+  **Must NOT do**:
+  - 실체인 의존 금지 (mock/sandbox만)
+  - Feature flag off 시 기존 동작 변경 금지
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: NO
+  - **Blocks**: B5
+  - **Blocked By**: B2
+
+  **Acceptance Criteria**:
+  - [ ] stablecoin rail 선택 시 adapter 호출 확인
+  - [ ] feature flag off 시 기존 동작 유지
+  - [ ] mock test green
+
+  **Commit**: YES
+  - Message: `task-b3: feat(settlement): stablecoin rail adapter skeleton`
+
+- [ ] B4. Signing Port 도입 (KMS/MPC 교체 준비)
+
+  **What to do**:
+  - `SigningService`를 provider-agnostic interface로 분리
+  - In-memory 구현은 dev adapter로 격리
+  - sign 호출에 `request_id`/`idempotency_key` 전달
+  - Signing log에 `key_id`, `key_version` 필드 강제
+
+  **Must NOT do**:
+  - Raw private key 노출 경로 허용 금지
+  - 기존 step-up 정책 변경 금지
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (B2와 병렬 가능)
+  - **Blocks**: B5
+  - **Blocked By**: B1
+
+  **Acceptance Criteria**:
+  - [ ] SigningService interface + dev adapter 분리 완료
+  - [ ] step-up 정책 기존 동작 유지
+  - [ ] signing test green
+
+  **Commit**: YES
+  - Message: `task-b4: refactor(signing): provider-agnostic signing port`
+
+- [ ] B5. Async Finality / Reorg 대응 상태 모델
+
+  **What to do**:
+  - Settlement 상태 확장: `SUBMITTED`, `CONFIRMING`, `SETTLED_FINAL`
+  - Confirmation 처리 이벤트/워커 경로 (outbox 기반)
+  - Reorg 감지 시 재확인 경로
+  - Ledger posting은 finality 이후만 허용
+
+  **Must NOT do**:
+  - 기존 SGD 동기 confirm 경로 제거 금지 (SGD는 즉시 confirm 유지)
+  - `latest` block tag 기반 settlement booking 금지
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: NO
+  - **Blocks**: B7
+  - **Blocked By**: B3, B4
+
+  **Acceptance Criteria**:
+  - [ ] submit 직후 settled 처리되지 않음 (stablecoin rail)
+  - [ ] SGD rail 기존 동기 confirm 유지
+  - [ ] confirm/finality 이벤트로 상태 전이
+  - [ ] 중복 정산 미발생
+
+  **Commit**: YES
+  - Message: `task-b5: feat(settlement): async finality state model with reorg handling`
+
+- [ ] B6. Ledger Multi-Asset 확장
+
+  **What to do**:
+  - SGD-only invariant 해제, USDC/USDT 허용
+  - `amount_minor` 정수 처리 + 자산코드 연동
+  - Double-entry net=0 불변식 유지
+  - 자산별 trial balance 테스트
+
+  **Must NOT do**:
+  - Phase 1 범위 외 자산(EUR, JPY 등) 허용 금지
+  - 소수점 금액 허용 금지 (항상 integer minor unit)
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES (B4, B5와 병렬 가능)
+  - **Blocks**: B7
+  - **Blocked By**: B1
+
+  **Acceptance Criteria**:
+  - [ ] USDC/USDT 엔트리 생성 가능
+  - [ ] transaction net=0 invariant 유지
+  - [ ] 기존 SGD 테스트 회귀 통과
+
+  **Commit**: YES
+  - Message: `task-b6: feat(ledger): multi-asset support for stablecoin settlement`
+
+- [ ] B7. Idempotency 상태전이 + Audit 확장/Redaction
+
+  **What to do**:
+  - `PENDING -> COMPLETE` 상태전이 실사용
+  - 동일 idempotency key 재요청 시 동일 응답 반환
+  - Decision record에 `rail`, `asset_code`, `custody_tx_id`, `tx_hash`, `confirmations` 추가
+  - `svid/token/key material` redaction 적용
+
+  **Must NOT do**:
+  - Decision record update/delete 경로 추가 금지
+  - 민감정보 평문 저장 금지
+
+  **Recommended Agent Profile**:
+  - **Category**: `deep`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: NO
+  - **Blocks**: B8
+  - **Blocked By**: B5, B6
+
+  **Acceptance Criteria**:
+  - [ ] 중복 요청 시 중복 정산 미발생
+  - [ ] decision record에 필수 증적 누락 없음
+  - [ ] 민감정보 저장 금지 테스트 통과
+
+  **Commit**: YES
+  - Message: `task-b7: feat(compliance): audit trail extension with redaction`
+
+- [ ] B8. Plan/Docs 정합성 업데이트 (Dual-rail 반영)
+
+  **What to do**:
+  - `docs/gtm/datasheet.md`, `one-pager.md` 7→8 layer 표현 통일
+  - Phase 1 scope: `SGD + USDC/USDT` 명시
+  - `docs/regulatory/control-matrix.md`에 blockchain/stablecoin 통제항목 추가
+
+  **Must NOT do**:
+  - 대외 문서에 미구현 기능을 "구현됨"으로 표기 금지
+
+  **Recommended Agent Profile**:
+  - **Category**: `writing`
+  - **Skills**: []
+
+  **Parallelization**:
+  - **Can Run In Parallel**: YES
+  - **Blocks**: T18 (E2E integration)
+  - **Blocked By**: B7
+
+  **Acceptance Criteria**:
+  - [ ] 세 문서 간 용어/범위 충돌 없음
+  - [ ] control-matrix에서 blockchain 관련 통제 추적 가능
+
+  **Commit**: YES
+  - Message: `task-b8: docs(gtm): align docs with 8-layer dual-rail architecture`
+
+---
+
 ### Wave 3: Integration + Compliance (Month 5-8)
 
 - [x] 18. E2E settlement flow integration
@@ -1848,15 +2102,18 @@ Max Concurrent: 8 (Wave 1)
   **Commit**: YES (standalone)
   - Message: `task-31: feat(risk): model risk governance with registry and kill-switch`
 
-- [x] 32. Landing page + GTM materials
+- [ ] 32. Landing page + GTM materials (ACCELERATED — building now)
 
   **What to do**:
-  - OMO-style landing page:
-    Hero: "Your agents need a bank account" / pipeline demo
-    Trust: Bank-grade security + MAS sandbox + SC Ventures backed
-    Features: 7-layer visualization + Telegram/Slack demo
-    Pricing: Free + Token-based
-    CTA: "Start your pilot"
+  - Next.js product landing page (`packages/landing`):
+    Hero: "The Operating System for Agent Commerce" / 8-layer stack tagline
+    Problem: Why agents need their own bank accounts
+    Solution: 8-Layer Agentic Banking Stack visualization (including Blockchain Infra + Stablecoin Settlement)
+    Dual-Rail: SGD domestic + USDC/USDT stablecoin architecture diagram
+    Partnership: SC Ventures × Hashed × Execution Team value map
+    Pipeline: 5-stage payment flow visualization
+    Regulatory: MAS FinTech Regulatory Sandbox + Pan-Asia roadmap
+    CTA: "Join the Pilot Program"
   - GTM materials: 1-pager, 2-page datasheet, API quickstart guide
 
   **Recommended Agent Profile**:
@@ -2164,6 +2421,7 @@ Max Concurrent: 8 (Wave 1)
 |------|-------|---------------|
 | 1 | T1-T8 | `task-1:` through `task-8:` (8 atomic commits) |
 | 2 | T9-T17 | `task-9:` through `task-17:` (9 atomic commits) |
+| B | B1-B8 | `task-b1:` through `task-b8:` (8 atomic commits) |
 | 3 | T18-T26 | `task-18:` through `task-26:` (9 atomic commits) |
 | 4 | T27-T34 | `task-27:` through `task-34:` (8 atomic commits) |
 

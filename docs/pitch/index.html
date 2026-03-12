@@ -114,6 +114,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
   <div class="s-label">Close</div>
   <a href="#ask">The Ask</a>
   <a href="#why-now">Why Now</a>
+  <a href="#glossary">Glossary</a>
 </nav>
 
 <div class="main">
@@ -135,7 +136,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 
 <!-- 2. EXECUTIVE SUMMARY -->
 <h2 id="summary">1. Executive Summary</h2>
-<p>Every enterprise is deploying autonomous AI agents. These agents will need to spend money, settle invoices, manage budgets, and comply with regulations &mdash; but today, <strong>no bank offers an account designed for machines.</strong></p>
+<p>Every enterprise is deploying autonomous AI agents. These agents will need to spend money, settle invoices, manage budgets, and comply with regulations &mdash; but today, <strong>few incumbent banks offer account rails explicitly designed for machine actors.</strong></p>
 <p>We build the <strong>Agent Operating Account (AOA)</strong>: bank-grade financial infrastructure purpose-built for autonomous agents. Not a neobank. Not a wallet. The <strong>trust layer</strong> between enterprise AI and the financial system.</p>
 <p>Jointly built by <strong>SC Ventures</strong> and <strong>Hashed</strong> to bridge traditional finance and blockchain infrastructure with the machine economy.</p>
 
@@ -145,7 +146,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <thead><tr><th>Today</th><th>Tomorrow (2027+)</th></tr></thead>
 <tbody>
 <tr><td>Agents use shared corporate cards or human-proxied payments</td><td>Every enterprise runs 10&ndash;100+ agents with independent budgets</td></tr>
-<tr><td>No identity standard for machine actors</td><td>Regulators require KYA (Know Your Agent) &mdash; who delegated, what limits, full audit trail</td></tr>
+<tr><td>No identity standard for machine actors</td><td>Regulators are moving toward stronger machine-actor accountability: who delegated, what limits, full audit trail</td></tr>
 <tr><td>Manual expense reconciliation</td><td>Real-time policy enforcement, automated settlement, instant dispute resolution</td></tr>
 </tbody>
 </table>
@@ -161,9 +162,9 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <tr><td><strong>3. Policy Engine</strong></td><td>OPA/Cedar deny-by-default</td><td>No spend without explicit policy. Shadow eval before deploy.</td></tr>
 <tr><td><strong>4. Risk Scoring</strong></td><td>15 pre-trade rules, &lt;100ms p95</td><td>Velocity, structuring, anomaly &mdash; real-time, kill-switchable.</td></tr>
 <tr><td><strong>5. Blockchain Infra</strong></td><td>Multi-chain adapter, KMS-based signing</td><td>Bridging agentic workloads to on-chain environments securely.</td></tr>
-<tr><td><strong>6. Stablecoin Settlement</strong></td><td>USDC/USDT + on-chain rail adapters</td><td>Instant, cross-border, 24/7 programmable settlement for machine economies.</td></tr>
-<tr><td><strong>7. Fiat Settlement</strong></td><td>State machine + SGD rail adapter</td><td>Escrow, idempotent saga, provider-agnostic.</td></tr>
-<tr><td><strong>8. Compliance</strong></td><td>Osprey AML + IVMS101 Travel Rule adapter</td><td>MAS-ready from day one.</td></tr>
+<tr><td><strong>6. Stablecoin Settlement</strong></td><td>USDC/USDT + SGD dual rail</td><td>Programmable settlement with cross-border and domestic routing.</td></tr>
+<tr><td><strong>7. Dispute/Recon</strong></td><td>Auto-accept &lt;$50, SLA tracking</td><td>Operational resilience with automated reconciliation paths.</td></tr>
+<tr><td><strong>8. Compliance</strong></td><td>Osprey AML + IVMS101 Travel Rule adapter</td><td>Designed for MAS sandbox-readiness from day one.</td></tr>
 </tbody>
 </table>
 <p><strong>UX:</strong> Messenger-first (Telegram/Slack) with real-time 5-stage pipeline visualization. Enterprise operators see every decision an agent makes, in real time.</p>
@@ -175,7 +176,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <!-- 5. ARCHITECTURE -->
 <h2 id="architecture">4. Technical Architecture</h2>
 
-<h3>4.1 Account of Agency (AOA)</h3>
+<h3>4.1 Agent Operating Account (AOA)</h3>
 <p>Each AI agent receives a dedicated AOA with:</p>
 <ul>
   <li><strong>SPIFFE/SVID identity</strong> &mdash; cryptographic agent identity bound to workload attestation</li>
@@ -235,12 +236,12 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
   <li>24/7 cross-border programmable settlement</li>
 </ul>
 
-<h4>Layer 7: Fiat Settlement Rail (SGD)</h4>
+<h4>Layer 7: Dispute &amp; Reconciliation</h4>
 <ul>
-  <li>Real-time SGD settlement via FAST (Fast And Secure Transfers)</li>
-  <li>Atomic commit with two-phase confirmation</li>
-  <li>Settlement finality guarantee</li>
-  <li>Multi-currency support roadmap (HKD, JPY, AUD)</li>
+  <li>Low-value auto-accept policies (e.g., &lt;$50 thresholds)</li>
+  <li>SLA-based exception handling and escalation paths</li>
+  <li>Automated reconciliation across ledger and settlement events</li>
+  <li>Dispute evidence packaging for operator and compliance workflows</li>
 </ul>
 
 <h4>Layer 8: Compliance &amp; Immutable Decision Records</h4>
@@ -266,7 +267,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <table>
 <thead><tr><th>Metric</th><th>Target</th></tr></thead>
 <tbody>
-<tr><td>Risk evaluation latency</td><td>&lt;50ms p99</td></tr>
+<tr><td>Risk evaluation latency</td><td>&lt;100ms p95</td></tr>
 <tr><td>Policy evaluation latency</td><td>&lt;5ms p99</td></tr>
 <tr><td>Settlement confirmation (FAST)</td><td>&lt;3s</td></tr>
 <tr><td>Stablecoin settlement confirmation</td><td>&lt;15s (finality dependent)</td></tr>
@@ -284,7 +285,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <h2 id="api">5. API Quickstart</h2>
 <p>Get your AI agent transacting in under 5 minutes.</p>
 
-<h3>Step 1: Create an Account of Agency (AOA)</h3>
+<h3>Step 1: Create an Agent Operating Account (AOA)</h3>
 <pre><code>curl -X POST https://api.agentic.bank/v1/accounts \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
@@ -375,7 +376,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
       <strong>AoaBank Pte. Ltd.</strong>
       <div class="label">Singapore Private Limited</div>
       <div style="margin-top:.8rem;font-size:.78rem;color:var(--slate)">
-        Separate Balance Sheet &bull; Own MAS PSA License &bull; Independent Board
+        Separate Balance Sheet &bull; Target MAS PSA License (post-sandbox) &bull; Independent Board
       </div>
     </div>
   </div>
@@ -407,6 +408,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <div style="margin:2rem 0;display:flex;justify-content:center;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 12px 24px rgba(15,23,42,.12)">
 <img src="../../resource/aoa-diagram-entity-structure.png" alt="Joint Venture Entity Structure" style="max-width:100%;height:auto">
 </div>
+<p style="font-size:.82rem;color:var(--gray);margin-top:.6rem">Diagram labels are target-state planning labels for sandbox and licensing sequence, not claims of current approval status.</p>
 
 <!-- 9. REGULATORY -->
 <h2 id="regulatory">8. Regulatory Strategy</h2>
@@ -460,10 +462,10 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <table>
 <thead><tr><th>Wave</th><th>Timeline</th><th>Focus</th><th>Tasks</th></tr></thead>
 <tbody>
-<tr><td><strong>Wave 1</strong></td><td>Month 0&ndash;2</td><td>Foundation + Entity</td><td>Charter, Entity, Scaffold, Types, Ledger, KYA, Capability, Decision Records</td></tr>
-<tr><td><strong>Wave 2</strong></td><td>Month 2&ndash;5</td><td>Core Modules</td><td>Policy Engine, Wallet, Signing, Risk, Idempotency, Settlement, Bot, Gateway, Pipeline UX</td></tr>
-<tr><td><strong>Wave 3</strong></td><td>Month 5&ndash;8</td><td>Integration + Compliance</td><td>E2E Flow, AML, Travel Rule, Disputes, Recon, Dashboard, Maturity UX, Privacy</td></tr>
-<tr><td><strong>Wave 4</strong></td><td>Month 8&ndash;12</td><td>Launch + Scale</td><td>MAS Evidence, Security Audit, Pilot Onboarding, Load Test, GTM Materials, Pricing Engine</td></tr>
+<tr><td><strong>Wave 1</strong></td><td>Month 0&ndash;6</td><td>Singapore Launch</td><td>MAS Sandbox Entry, SGD + USDC dual rail, first 3 pilot customers</td></tr>
+<tr><td><strong>Wave 2</strong></td><td>Month 7&ndash;12</td><td>Pan-Asia Expansion</td><td>HK (HKMA) + UAE (VARA), multi-currency AOA, cross-border stablecoin routing</td></tr>
+<tr><td><strong>Wave 3</strong></td><td>Month 13&ndash;18</td><td>Product Maturity</td><td>Advanced policy engine, graph-based risk, agent-to-agent settlement</td></tr>
+<tr><td><strong>Wave 4</strong></td><td>Month 19+</td><td>Series A &amp; Scale</td><td>Venture independence, Series A funding, global expansion</td></tr>
 </tbody>
 </table>
 <div class="callout"><strong>Critical Path:</strong> Scaffold &rarr; Ledger &rarr; Capability &rarr; Policy &rarr; Idempotency &rarr; E2E Integration &rarr; Reconciliation &rarr; Pilot Onboarding</div>
@@ -481,7 +483,7 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
 <tr><td>MVP: E2E agent payment flow</td><td>Month 5</td><td><span class="badge badge-blue">Architecture Complete</span></td></tr>
 <tr><td>MAS sandbox application</td><td>Month 6</td><td><span class="badge badge-yellow">Requirements Analyzed</span></td></tr>
 <tr><td>3 pilot customers live</td><td>Month 10</td><td><span class="badge badge-yellow">SC + Hashed Pipeline</span></td></tr>
-<tr><td>Series A readiness</td><td>Month 12</td><td>Revenue + regulatory traction</td></tr>
+<tr><td>Series A readiness</td><td>Month 19+</td><td>Revenue + regulatory traction</td></tr>
 </tbody>
 </table>
 
@@ -505,6 +507,75 @@ footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-si
   <li><strong>Stablecoin rails are production-ready</strong> &mdash; USDC/USDT on major chains provide instant, 24/7 cross-border settlement infrastructure</li>
   <li><strong>SC Ventures + Hashed have the playbook</strong> &mdash; Zodia, Nexus, Libeara prove the SCV model works; Hashed brings crypto-native execution</li>
 </ol>
+
+<h2 id="glossary">12. Glossary</h2>
+<table>
+<thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>AOA</td><td>Agent Operating Account, an account model designed for autonomous software agents.</td></tr>
+<tr><td>Agent</td><td>A software entity that can plan, decide, and execute actions with limited or full autonomy.</td></tr>
+<tr><td>AI</td><td>Artificial Intelligence.</td></tr>
+<tr><td>AML</td><td>Anti-Money Laundering controls and monitoring.</td></tr>
+<tr><td>AML/CFT</td><td>Anti-Money Laundering and Countering the Financing of Terrorism framework.</td></tr>
+<tr><td>API</td><td>Application Programming Interface for system-to-system communication.</td></tr>
+<tr><td>Arbitrum</td><td>An Ethereum Layer 2 network.</td></tr>
+<tr><td>Audit Trail</td><td>A tamper-evident record of decisions, transactions, and system events.</td></tr>
+<tr><td>Atomic Commit</td><td>A commit pattern where all required steps succeed together or fail together.</td></tr>
+<tr><td>AUD</td><td>Australian Dollar.</td></tr>
+<tr><td>Base</td><td>An Ethereum Layer 2 network in the Coinbase ecosystem.</td></tr>
+<tr><td>Capability</td><td>A specific permission granted to an agent, such as transfer limits or read access.</td></tr>
+<tr><td>Capability Token</td><td>A token encoding scoped permissions, constraints, and expiry.</td></tr>
+<tr><td>Counterparty</td><td>The other party in a financial transaction.</td></tr>
+<tr><td>Cross-border</td><td>A transaction that moves value across national jurisdictions.</td></tr>
+<tr><td>Cedar</td><td>A policy language used for fine-grained authorization decisions.</td></tr>
+<tr><td>DRI</td><td>Directly Responsible Individual, the person accountable for a decision area.</td></tr>
+<tr><td>E2E</td><td>End-to-End, covering the complete flow from request to settlement and audit.</td></tr>
+<tr><td>ESOP</td><td>Employee Stock Ownership Plan or option pool for team incentives.</td></tr>
+<tr><td>EVM</td><td>Ethereum Virtual Machine execution environment.</td></tr>
+<tr><td>FAST</td><td>Fast And Secure Transfers, Singapore's real-time retail payment rail.</td></tr>
+<tr><td>FATF</td><td>Financial Action Task Force, global AML standards body.</td></tr>
+<tr><td>FCA</td><td>Financial Conduct Authority (United Kingdom).</td></tr>
+<tr><td>Fiat</td><td>Government-issued currency, such as SGD or USD.</td></tr>
+<tr><td>GTM</td><td>Go-to-Market strategy for launch, distribution, and growth.</td></tr>
+<tr><td>HKD</td><td>Hong Kong Dollar.</td></tr>
+<tr><td>HKMA</td><td>Hong Kong Monetary Authority.</td></tr>
+<tr><td>HSM</td><td>Hardware Security Module for secure key storage and cryptographic operations.</td></tr>
+<tr><td>HTLC</td><td>Hash Time Locked Contract, a conditional settlement mechanism in smart contracts.</td></tr>
+<tr><td>Idempotency</td><td>The property that repeated identical requests produce one effective outcome.</td></tr>
+<tr><td>ISO 20022</td><td>International standard for structured financial messaging.</td></tr>
+<tr><td>IVMS101</td><td>InterVASP Messaging Standard 101, a Travel Rule data format standard.</td></tr>
+<tr><td>JPY</td><td>Japanese Yen.</td></tr>
+<tr><td>KMS</td><td>Key Management Service used to manage and protect cryptographic keys.</td></tr>
+<tr><td>KYA</td><td>Know Your Agent, controls to identify and govern machine actors and delegation context.</td></tr>
+<tr><td>mTLS</td><td>Mutual TLS, where both client and server authenticate each other.</td></tr>
+<tr><td>MAS</td><td>Monetary Authority of Singapore.</td></tr>
+<tr><td>MPI</td><td>Major Payment Institution license class under Singapore's Payment Services Act.</td></tr>
+<tr><td>OPA</td><td>Open Policy Agent, a policy engine for authorization and compliance rules.</td></tr>
+<tr><td>PEP</td><td>Politically Exposed Person screening category.</td></tr>
+<tr><td>Policy-as-Code</td><td>Managing and versioning policy rules in code form.</td></tr>
+<tr><td>p95 / p99</td><td>Latency percentiles; p95 means 95% of requests are below that value.</td></tr>
+<tr><td>PSA</td><td>Payment Services Act (Singapore).</td></tr>
+<tr><td>Recon</td><td>Reconciliation process to match and verify ledger and settlement records.</td></tr>
+<tr><td>RPC</td><td>Remote Procedure Call interface for communicating with blockchain nodes or services.</td></tr>
+<tr><td>Sandbox</td><td>A controlled regulatory testing environment with defined limits and safeguards.</td></tr>
+<tr><td>SCV</td><td>SC Ventures.</td></tr>
+<tr><td>SGD</td><td>Singapore Dollar.</td></tr>
+<tr><td>SLA</td><td>Service Level Agreement defining service performance commitments.</td></tr>
+<tr><td>SPI</td><td>Standard Payment Institution license class under Singapore's Payment Services Act.</td></tr>
+<tr><td>SPIFFE</td><td>Secure Production Identity Framework for Everyone, a workload identity standard.</td></tr>
+<tr><td>SPIRE</td><td>A production implementation of SPIFFE for issuing and managing identities.</td></tr>
+<tr><td>SVID</td><td>SPIFFE Verifiable Identity Document used as workload identity proof.</td></tr>
+<tr><td>Stablecoin</td><td>A digital asset designed to maintain stable value, usually pegged to fiat.</td></tr>
+<tr><td>TTL</td><td>Time To Live, the validity duration of a token or credential.</td></tr>
+<tr><td>TradFi</td><td>Traditional financial institutions and infrastructure.</td></tr>
+<tr><td>UAE</td><td>United Arab Emirates.</td></tr>
+<tr><td>USDC</td><td>USD Coin stablecoin.</td></tr>
+<tr><td>USDT</td><td>Tether stablecoin.</td></tr>
+<tr><td>VARA</td><td>Virtual Assets Regulatory Authority (Dubai).</td></tr>
+<tr><td>Wallet</td><td>A system component managing addresses, balances, and signing requests.</td></tr>
+<tr><td>XBRL</td><td>eXtensible Business Reporting Language for structured regulatory reporting.</td></tr>
+</tbody>
+</table>
 
 </div><!-- .content -->
 </div><!-- .main -->
