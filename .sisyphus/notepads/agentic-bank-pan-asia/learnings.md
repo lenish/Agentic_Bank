@@ -96,3 +96,19 @@
 - Capability tokens are plain objects (no JWT); IDs are generated via `crypto.randomUUID()` and revocation is immediate with `CAPABILITY_REVOKED` on subsequent verify calls.
 - Expiry enforcement follows `issued_at + ttl_seconds * 1000 < Date.now()` and emits append-only audit events (`ISSUED`, `USED`, `REVOKED`, `EXPIRED`).
 - Added 10 `bun:test` cases in `packages/kya/src/capability.test.ts` including QA scenarios for amount-limit overflow and 1-second TTL expiry behavior.
+
+## [2026-03-12] Task 9: Policy Engine (deny-by-default PDP)
+- Implemented  PDP with deny-by-default behavior: no current policy or no matching rule returns .
+- Added pre-trade rule support in engine: , ,  (including overnight ranges), , and .
+- Policy versions use semver strings and are immutable in store once inserted; previous versions are preserved and selectable for simulation.
+- Added simulation/shadow paths with zero side effects on live frequency counters by evaluating candidate versions with .
+- In-memory policy store follows Phase 1 pattern () and includes TODO marker for PostgreSQL migration.
+
+## [2026-03-12] Task 9: Policy Engine (deny-by-default PDP)
+- Implemented @aoa/policy PDP with deny-by-default behavior: no current policy or no matching rule returns NO_MATCHING_POLICY.
+- Added pre-trade rule support in engine: amount_limit, counterparty_whitelist, time_of_day (including overnight ranges), action_types, and frequency_limit.
+- Policy versions use semver strings and are immutable in store once inserted; previous versions are preserved and selectable for simulation.
+- Added simulation and shadow paths with zero side effects on live frequency counters by evaluating candidate versions with track_usage=false.
+- In-memory policy store follows Phase 1 pattern (Map) and includes TODO marker for PostgreSQL migration.
+
+- Correction: the earlier Task 9 bullet block at lines 100-105 was shell-interpolation-corrupted; canonical Task 9 notes are lines 107-112.

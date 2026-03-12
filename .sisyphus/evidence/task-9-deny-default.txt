@@ -1,0 +1,38 @@
+=== Task 9: Policy Engine (Deny-by-Default PDP) ===
+
+--- Test Command ---
+export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/policy
+
+--- Test Result ---
+PASS
+- 8 tests passed
+- 0 tests failed
+
+--- Build Command ---
+export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/policy
+
+--- Build Result ---
+PASS
+- Bundled modules successfully
+- tsc --emitDeclarationOnly completed with exit 0
+
+--- Acceptance Verification ---
+1) Deny-by-default:
+   - evaluate() without configured policy returns allowed=false
+   - reason_codes includes NO_MATCHING_POLICY
+2) Policy match allow:
+   - amount-limit rule allows 30_000 cents when max is 50_000
+3) Shadow evaluation:
+   - candidate policy evaluated in parallel via ShadowEvaluator
+   - candidate evaluation runs with track_usage=false (no side effects)
+4) Version preservation:
+   - store preserves 1.0.0 and 1.1.0 simultaneously
+   - simulate(..., "1.0.0") evaluates historical version
+5) Simulation API:
+   - PolicyEngine.simulate(policyId, input, version?) returns PolicyEvalResult
+
+--- QA Scenario Evidence ---
+Scenario A (no policy): denied with NO_MATCHING_POLICY
+Scenario B (amount <= 500 SGD):
+- 300 SGD (30_000 cents): approved
+- 700 SGD (70_000 cents): denied with AMOUNT_LIMIT_EXCEEDED
