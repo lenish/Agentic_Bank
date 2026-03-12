@@ -1,0 +1,27 @@
+Task 20: Travel Rule Adapter Interface (IVMS101)
+================================================
+
+Test Results: 41 pass, 0 fail (16 new travel-rule tests + 25 existing)
+Build: exit 0 (9.51 KB bundled, 5 modules)
+
+Threshold Evidence — Travel Rule (1,500 SGD = 150,000 cents):
+  - 100_000 cents (1,000 SGD) → required: false ✅
+  - 149_999 cents (1,499.99 SGD) → required: false ✅
+  - 150_000 cents (1,500 SGD) → required: true, status: SENT ✅
+  - 200_000 cents (2,000 SGD) → required: true, status: SENT ✅
+
+QA Scenarios:
+  1. 1,000 SGD (100_000 cents) → Travel Rule skipped ✅
+  2. 2,000 SGD (200_000 cents) → Travel Rule data sent ✅
+  3. Missing originator.name → TRAVEL_RULE_ORIGINATOR_NAME_REQUIRED ✅
+
+Acceptance Criteria:
+  - IVMS101 required field missing → validation error ✅
+  - E2E send/verify with mock provider works ✅
+  - Below-threshold transactions skip Travel Rule ✅
+  - No residual PII in storage after transmission (Zero-PII-at-Rest) ✅
+
+Files:
+  - packages/compliance/src/travel-rule.ts (TravelRuleService + MockRailAdapter)
+  - packages/compliance/src/travel-rule.test.ts (16 tests)
+  - packages/compliance/src/index.ts (updated exports)

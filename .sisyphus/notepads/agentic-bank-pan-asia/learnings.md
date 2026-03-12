@@ -196,3 +196,12 @@
 - ISO 20022 pain.001 validation is separate from AML rules — validates message structure, throws on missing required fields.
 - TS strict mode: optional fields (`case_id?: string`) need `as string` assertion in tests after `expect().toBeDefined()` — `toBe()` overload rejects `string | undefined`.
 - 14 new tests (exceeds 8 minimum) covering all 4 rules, review queue lifecycle, pain.001 validation, input validation, and clean NALT path.
+
+## [2026-03-12] Task 20 — Travel Rule Adapter (IVMS101)
+- TravelRuleService uses adapter pattern (RailAdapter interface) for vendor-agnostic Travel Rule transmission — no vendor lock-in.
+- Local IVMS101Payload type defined in compliance package (uses `account_number`, `amount_sgd_cents`, `transaction_date: Date`) differs from shared-types version (uses `account_id`, `amount`, `date: string`). Both are valid — shared-types is ISO 20022 general, compliance is Travel Rule specific.
+- Travel Rule threshold: 1,500 SGD = 150_000 cents. Below → skip, at/above → validate + send.
+- Zero-PII-at-Rest: evaluate() does not store payload reference after adapter.sendTravelRuleData() — only reference_id returned.
+- MockRailAdapter validates required fields in sendTravelRuleData() and returns FAILED for empty fields (defensive mock).
+- 16 new tests (exceeds 8 minimum): 3 MockRailAdapter, 13 TravelRuleService (threshold boundary, validation, E2E, zero-PII).
+- Total compliance tests: 41 (11 decision-record + 14 AML + 16 travel-rule).

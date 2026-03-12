@@ -18,3 +18,13 @@ export type {
   AmlCase,
   AmlCaseStatus,
 } from "./aml";
+
+// Travel Rule — IVMS101 adapter interface + threshold evaluation
+export { TravelRuleService, MockRailAdapter } from "./travel-rule";
+export type {
+  IVMS101Payload,
+  RailAdapter,
+  RailSendResult,
+  CounterpartyVerification,
+  TravelRuleEvalResult,
+} from "./travel-rule";
