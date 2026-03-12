@@ -265,6 +265,13 @@
 - Control matrix identifies 23 IMPLEMENTED controls, 1 PARTIAL (human-in-the-loop UI), and 2 PLANNED (reporting/wind-down execution).
 - Evidence index provides a structured map for MAS auditors to verify AML, KYA, and Audit Trail integrity.
 
+## [2026-03-12] Task 31 — Model Risk Governance Registry
+- `ModelRegistry` in `@aoa/risk` follows existing in-memory Phase 1 pattern: `Map<string, ModelRecord>` primary store + per-type active pointer.
+- Approval workflow is stateful and explicit: `register -> PENDING_APPROVAL`, `approve -> APPROVED + approved_at`, `reject -> REJECTED`, `kill -> KILLED + killed_at + kill_reason`.
+- Fallback behavior is implemented on active-model kill: when current active model is killed, registry automatically resolves to the most recent other `APPROVED` model of the same type.
+- Shadow/canary rollout control is strict integer percent (`0-100`) via `shadow_traffic_pct`; non-approved models cannot receive shadow traffic updates (`MODEL_NOT_APPROVED`).
+- Semver validation is dependency-free (regex) to keep risk package lightweight and avoid adding dependencies.
+
 ## Task 33: Incident Playbook and Runbook Implementation
 - Established a comprehensive incident response framework in `docs/runbooks/`.
 - Defined SEV1-SEV3 severity levels with specific response and escalation SLAs.

@@ -1,4 +1,5 @@
 export { RiskEngine } from "./engine";
+export { ModelRegistry } from "./model-registry";
 export {
   AMOUNT_THRESHOLD_RULE,
   BALANCE_ANOMALY_RULE,
@@ -27,3 +28,5 @@ export type {
   RiskRuleDecision,
   RiskRuleEvaluation,
 } from "./schema";
+
+export type { ModelRecord, ModelRegistrationInput, ModelStatus, ModelType } from "./model-registry";

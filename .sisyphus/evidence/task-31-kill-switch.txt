@@ -1,0 +1,29 @@
+Task: T31 Model risk governance framework
+Date: 2026-03-12
+
+Changed files:
+- packages/risk/src/model-registry.ts
+- packages/risk/src/model-registry.test.ts
+- packages/risk/src/index.ts
+
+Verification:
+1) Test command
+   export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/risk
+   Result: PASS
+   Details: 27 pass, 0 fail (18 existing + 9 new)
+
+2) Build command
+   export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/risk
+   Result: PASS (exit 0)
+
+3) Diagnostics
+   lsp_diagnostics attempted for changed TypeScript files.
+   Result: unavailable in environment (typescript-language-server not installed).
+   Compensating check: package build succeeded with tsc declaration emit.
+
+Implemented capabilities:
+- In-memory ModelRegistry with typed CRUD-style APIs (register/getById/list)
+- Approval workflow (approve/reject) with active model gate
+- Kill-switch (kill with killed_at and kill_reason)
+- Shadow/canary control via shadow_traffic_pct (0-100)
+- Active model fallback to most recent APPROVED model when active model is killed
