@@ -1,0 +1,9 @@
+.pipeline { font-family: monospace; padding: 1rem; }
+.pipeline-title { margin-bottom: 0.5rem; }
+.pipeline-stage { display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0; }
+.pipeline-stage.done { color: #22c55e; }
+.pipeline-stage.error { color: #ef4444; }
+.pipeline-stage.running { color: #f59e0b; }
+.pipeline-stage.pending { color: #9ca3af; }
+.pipeline-stage-time { color: #6b7280; font-size: 0.875em; }
+.pipeline-stage-reason { color: #ef4444; }

@@ -1,0 +1,4 @@
+T17: Intent pipeline visualization
+Tests: 7 pass, 0 fail
+Build: exit 0
+Files: pipeline.tsx, pipeline.css, pipeline-server.ts, pipeline.test.ts, index.ts

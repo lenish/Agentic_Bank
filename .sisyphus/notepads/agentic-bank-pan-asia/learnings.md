@@ -173,3 +173,9 @@
 - Build: 54.53 KB bundled, 29 modules, tsc clean.
 - No external API calls (webhook handler only per requirements).
 - No `any` types (strict mode).
+
+## [2026-03-12] Task 17: Pipeline Visualization
+- React component in packages/dashboard with Hono SSE server
+- tsconfig needs "jsx": "react-jsx" and "jsxImportSource": "react" for TSX
+- bun:test can test React component types without DOM (just type checks)
+- SSE endpoint uses ReadableStream with text/event-stream content-type
