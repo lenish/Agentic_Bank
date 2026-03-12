@@ -126,3 +126,10 @@
 - Step-up threshold is reused as integer SGD cents (`10_000_00` = 1,000,000 cents = 10,000 SGD) and enforced only for amounts above threshold.
 - Key rotation keeps old public keys indexed by version and verifies signatures by trying each known public key version.
 - Signing logs are append-only and should return defensive copies (`Date` + metadata clone) to avoid external mutation.
+
+## [2026-03-12] Task 12 — Pre-trade Risk Rules Engine
+- Implemented `@aoa/risk` as a synchronous rule-evaluation engine with 15 explicit pre-trade rules and per-rule kill-switch controls (`activateRule`/`deactivateRule`).
+- Risk result contract returns `risk_score` (capped at 100), `decision`, `reason_codes`, `triggered_rules`, `evaluated_at`, and `evaluation_ms`; caller can append this to Decision Record storage.
+- Decision precedence is deterministic: any `BLOCK` rule wins, else any `HOLD`, else score threshold (`> 70`) triggers `HOLD`, else `ALLOW`.
+- Input model remains SGD-cent integer first; rapid-succession supports optional `transaction_count_last_5_minutes` and falls back to hourly count when unavailable.
+- `bun:test` coverage includes direct rule-level assertions and engine-level behavior (score cap, threshold hold, kill-switch, and metadata timing checks).

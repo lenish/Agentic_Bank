@@ -1,0 +1,25 @@
+Task: 12 - Pre-trade risk rules engine (velocity check scenario evidence)
+Date: 2026-03-12
+
+Scenario:
+- Same agent submits repeated requests; velocity threshold is >5 in last hour.
+- Expected behavior: HOLD from 6th request onward with VELOCITY_CHECK reason code.
+
+Evidence source:
+- Automated unit test: "Risk rules > triggers VELOCITY_CHECK when last-hour count exceeds 5"
+- Automated unit test: "RiskEngine > returns HOLD when hold rule triggers and no block rules trigger"
+
+Verification commands executed:
+1) export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/risk
+   - Result: PASS
+   - Tests: 18 passed, 0 failed
+
+2) export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/risk
+   - Result: PASS (exit 0)
+
+3) export PATH="$HOME/.bun/bin:$PATH" && bun run lint --filter=@aoa/risk
+   - Result: PASS (tsc --noEmit)
+
+Observed outcome:
+- VELOCITY_CHECK rule triggers HOLD when transaction_count_last_hour > 5.
+- Engine output includes "VELOCITY_CHECK" in reason_codes and triggered_rules.
