@@ -1,0 +1,33 @@
+Task: T23 - Ops dashboard (real-time KPI)
+Date: 2026-03-12
+
+Implemented files:
+- packages/dashboard/src/kpi.ts
+- packages/dashboard/src/kpi-server.ts
+- packages/dashboard/src/kpi.test.ts
+- packages/dashboard/src/index.ts (updated exports)
+
+Acceptance coverage:
+- Added KpiSnapshot/KpiEvent types and KpiAggregator methods:
+  - record(event)
+  - getSnapshot(from?, to?)
+  - getTimeSeries(intervalMinutes)
+  - checkAlerts(thresholds)
+- Added Hono endpoints:
+  - GET /api/v1/kpi/snapshot
+  - GET /api/v1/kpi/timeseries?interval=5
+  - POST /api/v1/kpi/events
+- Added 9 KPI tests in kpi.test.ts (minimum 8 required)
+
+Verification:
+- LSP diagnostics: unavailable in environment (`typescript-language-server` not installed)
+- Test command:
+  export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/dashboard
+  Result: PASS (16 pass, 0 fail)
+- Build command:
+  export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/dashboard
+  Result: PASS (exit 0)
+
+Notes:
+- No new dependencies added.
+- No `any` types introduced.
