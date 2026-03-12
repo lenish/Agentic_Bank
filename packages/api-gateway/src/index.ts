@@ -19,3 +19,22 @@ export type { RateLimitOptions } from "./middleware/rate-limit";
 export { piiMaskMiddleware, maskPiiFields } from "./middleware/pii-mask";
 export { validateMiddleware } from "./middleware/validate";
 export type { ValidationSchema, ValidationIssue } from "./middleware/validate";
+
+// Pricing / Billing
+export { PricingEngine, createBillingRoutes } from "./pricing";
+export {
+  FREE_TIER_LIMIT,
+  TRANSACTION_COST_CENTS,
+  PREMIUM_DECISION_COST_CENTS,
+  API_CALL_COST_CENTS,
+} from "./pricing";
+export type {
+  UsageType,
+  UsageRecord,
+  FreeTierResult,
+  Invoice,
+  InvoiceLineItem,
+  UsageSummary,
+  PricingTier,
+  AccountTier,
+} from "./pricing";

@@ -7,3 +7,4 @@ export { createKpiServer } from './kpi-server';
 export { MaturityLadderService } from './maturity-service';
 export type { MaturityStage, MaturityStageId } from './maturity-service';
 export { MaturityLadder } from './maturity-ladder';
+export { PricePage } from './price-page';

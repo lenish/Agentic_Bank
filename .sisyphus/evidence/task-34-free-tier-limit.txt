@@ -1,0 +1,34 @@
+Task 34: Commercial Pricing Engine — Free Tier Limit Evidence
+=============================================================
+
+Test: free tier allows exactly 100 transactions
+- After 99 transactions: allowed=true, remaining=1, exceeded=false
+- After 100 transactions: allowed=false, remaining=0, exceeded=true
+
+Test: free tier exceeded at 101 returns upgrade_url
+- After 101 transactions: allowed=false, exceeded=true, remaining=0
+- upgrade_url: "https://aoa.example.com/upgrade"
+
+Test: free tier transactions cost 0, overage costs 1 cent each
+- First 100 transactions: costSgdCents=0 (free)
+- 101st transaction: costSgdCents=1 (1 cent SGD)
+
+Test: invoice generation with overage
+- 105 transactions → 2 line items:
+  1. Free Tier Transactions: qty=100, cost=0
+  2. Overage Transactions: qty=5, cost=5 cents
+
+=== API Gateway Test Results ===
+@aoa/api-gateway:test: 37 pass, 0 fail, 140 expect() calls
+- 13 new pricing/billing tests (10 PricingEngine + 3 Billing API)
+- 21 existing tests untouched and passing
+- 3 load tests passing
+
+=== Dashboard Test Results ===
+@aoa/dashboard:test: 32 pass, 0 fail, 80 expect() calls
+- 4 new PricePage component tests
+- 28 existing tests untouched and passing
+
+=== Build Results ===
+@aoa/api-gateway:build: Bundled 33 modules, 72.27 KB, tsc --emitDeclarationOnly clean
+@aoa/dashboard:build: Bundled 36 modules, 124.0 KB, tsc --emitDeclarationOnly clean

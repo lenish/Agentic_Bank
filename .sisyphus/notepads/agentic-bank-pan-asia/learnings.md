@@ -287,3 +287,14 @@
 - Implemented per-service runbooks for all 7 core services, including diagnosis, recovery, and escalation procedures.
 - Integrated MTTR < 30 mins KPI into the recovery documentation.
 - Ensured all documentation follows the "Anti-AI-Slop" rules for clarity and professionalism.
+
+## [2026-03-12] Task 34 — Commercial Pricing Engine (Free + Token-Based Billing)
+- PricingEngine in `@aoa/api-gateway` uses in-memory `Map<string, UsageRecord[]>` for usage and `Map<string, PricingTier>` for tier state.
+- Free tier: 100 transactions/month at zero cost. Overage at 1 cent SGD/tx. Premium decisions at 5 cents SGD/decision (Pro only).
+- `checkFreeTier()` returns `{ allowed, remaining, exceeded, upgrade_url? }` — upgrade_url only present when exceeded.
+- `generateInvoice()` produces line items by type: Free Tier Transactions (qty=min(actual, 100), cost=0), Overage Transactions, Pro Transactions, Premium Risk Decisions, API Calls.
+- All costs are integer SGD cents — no floating point. Invoice subtotal is sum of line_item totals.
+- Billing API routes (`createBillingRoutes`) are standalone Hono sub-app: `GET /api/v1/billing/usage`, `GET /api/v1/billing/invoice`. Both require `account_id` query param.
+- Dashboard PricePage component uses static FEATURES array for comparison table — 8 feature rows comparing Free vs Pro.
+- api-gateway tests: 37 total (13 new pricing + 21 existing gateway/pipeline + 3 load tests).
+- dashboard tests: 32 total (4 new price-page + 28 existing).
