@@ -1,0 +1,40 @@
+• Packages in scope: @aoa/ledger
+• Running test in 1 packages
+• Remote caching disabled
+@aoa/ledger:test: cache bypass, force executing fd25230185ac5b7d
+@aoa/ledger:test: $ bun test
+@aoa/ledger:test: bun test v1.3.10 (30e609e0)
+@aoa/ledger:test: 
+@aoa/ledger:test: src/index.test.ts:
+@aoa/ledger:test: (pass) LedgerService > debit+credit pair creates balanced entries (sum=0) [0.73ms]
+@aoa/ledger:test: (pass) LedgerService > A→B transfer decrements A, increments B, and trial balance holds [0.12ms]
+@aoa/ledger:test: (pass) LedgerService > direct UPDATE is blocked; use compensating entry [0.02ms]
+@aoa/ledger:test: (pass) LedgerService > SERIALIZABLE concurrent transfers preserve consistency [0.19ms]
+@aoa/ledger:test: (pass) LedgerService > point-in-time balance query returns historical value [0.17ms]
+@aoa/ledger:test: (pass) LedgerService > compensating entry reverses prior transaction without updates [0.55ms]
+@aoa/ledger:test: (pass) TransactionStateMachine > valid transitions succeed [0.08ms]
+@aoa/ledger:test: (pass) TransactionStateMachine > invalid transitions throw [0.19ms]
+@aoa/ledger:test: 
+@aoa/ledger:test:  8 pass
+@aoa/ledger:test:  0 fail
+@aoa/ledger:test:  19 expect() calls
+@aoa/ledger:test: Ran 8 tests across 1 file. [11.00ms]
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    71ms 
+
+• Packages in scope: @aoa/ledger
+• Running build in 1 packages
+• Remote caching disabled
+@aoa/ledger:build: cache miss, executing 761891d9604b4e12
+@aoa/ledger:build: $ bun build src/index.ts --outdir dist --target bun && tsc --emitDeclarationOnly
+@aoa/ledger:build: Bundled 5 modules in 9ms
+@aoa/ledger:build: 
+@aoa/ledger:build:   index.js  10.58 KB  (entry point)
+@aoa/ledger:build: 
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    475ms 
+

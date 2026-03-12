@@ -54,3 +54,24 @@
 - OpenAPI validation: `npx @redocly/cli lint openapi.yaml` passes (1 warning about localhost is acceptable)
 - TypeScript isolatedModules requires `export type` for type-only re-exports in index.ts
 - Zod schema pattern: export both schema (z.ZodType) and inferred type (z.infer<typeof Schema>)
+
+## [2026-03-12] Task 5: Ledger Core + Account Model
+- Implemented `@aoa/ledger` with append-only double-entry model: each transfer posts exactly two rows (`-amount`, `+amount`) and validates net zero per transaction.
+- Added immutable ledger schema SQL (`ledgerSchemaSql`) including `accounts`, `ledger_entries`, SGD currency check, and trigger to block UPDATE/DELETE for compensating-entry-only correction flow.
+- Implemented in-memory fallback store (`InMemoryLedgerStore`) with serialized write queue to emulate SERIALIZABLE transaction behavior when PostgreSQL is unavailable.
+- Added `AccountService` with account types (`user_account`, `agent_account`, `escrow_account`, `fee_account`) and freeze/unfreeze controls; frozen accounts are blocked from posting entries.
+- Added `LedgerService` APIs: `createEntry`, `getBalance`, `getBalanceAt`, `createCompensatingEntry`, `getTrialBalance`; all amounts validated as positive integer SGD cents.
+- Added pure `TransactionStateMachine` with explicit allowed transitions and typed `InvalidStateTransitionError` for invalid moves.
+- Test coverage includes balanced pair invariant, transfer balances + trial balance, direct update guard, concurrent transfer consistency, state-machine valid/invalid transitions, historical balance query, and compensating-entry reversal.
+
+## [2026-03-12] Task 8: Immutable Decision Record Storage + Query API
+- Implemented `@aoa/compliance` DecisionRecordService with append-only semantics: NO update/delete/remove/modify/patch methods at service or store layer.
+- Immutability enforced at 3 levels: (1) TypeScript `readonly` on all DecisionRecord fields, (2) `Object.freeze()` in store, (3) defensive copy of input arrays/objects.
+- Compliance schema diverges from `@aoa/shared-types` DecisionRecord: uses `HELD` (not `ESCALATED`), adds `metadata: Record<string, unknown>`, and uses `policy_version: string` (semver) instead of `number`.
+- DecisionRecordInput separates user-provided fields from auto-generated ones (id, created_at).
+- Multiple records per trace_id are allowed — policy + risk engines both append for the same transaction.
+- In-memory store uses `Map<id, DecisionRecord>` with write-once guard (throws on duplicate id).
+- Time-range filtering via `DecisionQueryOptions { from?: Date; to?: Date }` applied in getByAgentId and getByOutcome.
+- MAS retention comment added: "7 years per MAS financial record requirements".
+- TODO for production: PostgreSQL with INSERT-only row-level security.
+- TypeScript strict mode: `as unknown as Record<string, unknown>` double-cast needed for runtime method-existence checks on class instances.
