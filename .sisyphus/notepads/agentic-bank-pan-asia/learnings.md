@@ -179,3 +179,11 @@
 - tsconfig needs "jsx": "react-jsx" and "jsxImportSource": "react" for TSX
 - bun:test can test React component types without DOM (just type checks)
 - SSE endpoint uses ReadableStream with text/event-stream content-type
+
+## [2026-03-12] Task 18 — E2E Settlement Flow Integration
+- `PaymentPipeline` in api-gateway is easiest to keep dependency-light by using structural service interfaces and constructor injection, so package.json changes are not required.
+- Pipeline idempotency can reuse settlement-layer semantics by checking `idempotencyStore.has/get` early and persisting final `PaymentResult` on every terminal outcome.
+- Failure-path requirement (record decision on stage failure) is handled by appending a rejection decision in the catch path for all non-compliance-stage failures.
+- Gateway integration remains backward-compatible by keeping `/api/v1/payments` fallback behavior (`status: initiated`) when no `paymentPipeline` is injected.
+- Added 10 integration tests for pipeline (happy path, idempotency replay, policy deny, risk hold/block, settlement submit/confirm failure, ledger failure, KYA mismatch, p95 latency).
+- TypeScript LSP diagnostics tool cannot run in this environment because `typescript-language-server` is not installed; compensated with `tsc --noEmit` lint pass.

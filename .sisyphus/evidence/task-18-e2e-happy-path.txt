@@ -1,0 +1,25 @@
+Task: T18 E2E settlement flow integration
+Date: 2026-03-12
+
+Implemented:
+- Created packages/api-gateway/src/pipeline.ts with PaymentPipeline orchestration across KYA, capability, policy, risk, settlement, ledger, and decision record stages.
+- Created packages/api-gateway/src/pipeline.test.ts with 10 integration tests.
+- Updated packages/api-gateway/src/gateway.ts to optionally execute PaymentPipeline in POST /api/v1/payments.
+- Updated packages/api-gateway/src/index.ts to export PaymentPipeline and related types.
+
+Verification Commands:
+1) export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/api-gateway
+   Result: PASS
+   Details: 21 pass, 0 fail (includes existing 11 + new 10)
+
+2) export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/api-gateway
+   Result: PASS
+   Details: bun build + declaration emit completed, exit 0
+
+3) export PATH="$HOME/.bun/bin:$PATH" && bun run lint --filter=@aoa/api-gateway
+   Result: PASS
+   Details: tsc --noEmit clean
+
+LSP Diagnostics:
+- Attempted on changed files.
+- Environment limitation: typescript-language-server not installed; lsp_diagnostics unavailable.

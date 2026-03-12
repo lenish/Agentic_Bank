@@ -1,6 +1,14 @@
 // Gateway factory
 export { createGateway } from "./gateway";
 export type { GatewayOptions } from "./gateway";
+export { PaymentPipeline } from "./pipeline";
+export type {
+  PaymentPipelineContext,
+  PaymentPipelineServices,
+  PaymentRequest,
+  PaymentResult,
+  PipelineStage,
+} from "./pipeline";
 
 // Middleware
 export { authMiddleware } from "./middleware/auth";

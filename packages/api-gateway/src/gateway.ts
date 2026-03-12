@@ -10,6 +10,7 @@ import {
 } from "./middleware/rate-limit";
 import { piiMaskMiddleware } from "./middleware/pii-mask";
 import { validateMiddleware, type ValidationSchema } from "./middleware/validate";
+import { PaymentPipeline } from "./pipeline";
 
 // ---------------------------------------------------------------------------
 // Gateway configuration
@@ -20,6 +21,7 @@ export interface GatewayOptions {
   readonly capabilityLookup: CapabilityLookup;
   /** Optional rate-limit overrides. */
   readonly rateLimitOptions?: RateLimitOptions;
+  readonly paymentPipeline?: PaymentPipeline;
 }
 
 // ---------------------------------------------------------------------------
@@ -104,11 +106,64 @@ export function createGateway(options: GatewayOptions): Hono {
     "/api/v1/payments",
     cap,
     validateMiddleware(paymentSchema),
-    (c) =>
-      c.json(
-        { payment_id: crypto.randomUUID(), status: "initiated" },
-        201,
-      ),
+    async (c) => {
+      if (!options.paymentPipeline) {
+        return c.json(
+          { payment_id: crypto.randomUUID(), status: "initiated" },
+          201,
+        );
+      }
+
+      const body = (await c.req.json()) as Record<string, unknown>;
+      const authorization = c.req.header("Authorization") ?? "";
+      const bearerToken = authorization.startsWith("Bearer ")
+        ? authorization.slice(7).trim()
+        : "";
+      const paymentId =
+        typeof body.payment_id === "string" && body.payment_id.trim()
+          ? body.payment_id
+          : crypto.randomUUID();
+      const amount = typeof body.amount === "number" ? Math.trunc(body.amount) : 0;
+      const counterpartyId = typeof body.to === "string" ? body.to : "";
+      const capabilityId = c.req.header("X-Capability-Id") ?? "";
+      const idempotencyKey = c.req.header("X-Idempotency-Key") ?? paymentId;
+
+      const result = await options.paymentPipeline.execute(
+        {
+          payment_id: paymentId,
+          agent_id:
+            typeof body.agent_id === "string" && body.agent_id.trim()
+              ? body.agent_id
+              : "agent-unknown",
+          capability_id: capabilityId,
+          amount_sgd_cents: amount,
+          counterparty_id: counterpartyId,
+          action:
+            typeof body.action === "string" && body.action.trim()
+              ? body.action
+              : "PAYMENT_TRANSFER",
+          idempotency_key: idempotencyKey,
+        },
+        {
+          svid: bearerToken,
+          policy_id:
+            typeof body.policy_id === "string" && body.policy_id.trim()
+              ? body.policy_id
+              : undefined,
+          sender_account:
+            typeof body.sender_account === "string" && body.sender_account.trim()
+              ? body.sender_account
+              : undefined,
+          receiver_account:
+            typeof body.receiver_account === "string" && body.receiver_account.trim()
+              ? body.receiver_account
+              : undefined,
+        },
+      );
+
+      const statusCode = result.status === "SETTLED" ? 201 : result.status === "HELD" ? 202 : 422;
+      return c.json(result, statusCode);
+    },
   );
 
   return app;
