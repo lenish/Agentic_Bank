@@ -17,3 +17,14 @@
 - Defined escalation triggers and governance cadence (Weekly/Bi-weekly/Monthly/Quarterly).
 - Incorporated Zodia archetype and SCV stage-gate model.
 - Included non-negotiable product requirements: Capability Delegation, Decision Record Plane, Provider Adapters.
+
+## [2026-03-12] Task 3: Monorepo Scaffold
+- Bun binary at ~/.bun/bin/bun — not in default PATH; need `export PATH="$HOME/.bun/bin:$PATH"`
+- Turborepo v2.8.16 works with bun workspaces out of the box
+- `bun build src/index.ts --outdir dist --target bun && tsc --emitDeclarationOnly` is the build pattern: bun for JS output, tsc for .d.ts only
+- 10 packages: shared-types, ledger, kya, policy, risk, settlement, compliance, api-gateway, messenger-bot, dashboard — all @aoa/ scoped
+- Docker Compose: postgres:16 (POSTGRES_DB=aoa_dev), redis:7-alpine, redpanda (Kafka-compatible at port 19092)
+- .env.tpl uses op:// references exclusively — verified with grep
+- turbo.json `test` task has `"cache": false` — tests should always run fresh
+- CI pipeline: checkout → setup-bun → bun install --frozen-lockfile → lint → typecheck → test → build
+- bun-types devDep needed in each package for Bun API types (bun:test, etc.)
