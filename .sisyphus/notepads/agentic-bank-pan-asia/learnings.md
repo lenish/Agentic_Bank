@@ -237,3 +237,13 @@
 - `MaturityLadderService.transition()` enforces one-step forward progression only (`targetIndex === currentIndex + 1`) to match upgrade-ladder UX semantics.
 - `renderToStaticMarkup` + `React.createElement` is a reliable `bun:test` pattern for TS (`.ts`) component tests without requiring DOM/jsdom.
 - LSP diagnostics check attempted on all changed dashboard files, but local environment still lacks `typescript-language-server`; `bun run build --filter=@aoa/dashboard` passed as type-safety gate.
+
+## [2026-03-12] Task 26 — Slack Bot with Block Kit Integration
+- SlackBotHandler mirrors TelegramBotHandler structure but returns Block Kit JSON (`{ blocks: [...] }`) instead of plain text.
+- Slack uses string user IDs (e.g., "U_TEST") vs Telegram's numeric IDs — SlackWorkspaceRegistry uses `Map<string, string>` instead of `Map<number, string>`.
+- Block Kit format: `type: "section"` with `mrkdwn` text, `type: "divider"`, `type: "actions"` with button elements.
+- Payment responses use `response_type: "in_channel"` (visible to all), other responses use `"ephemeral"` (visible only to user).
+- Slash command payload is `application/x-www-form-urlencoded`; interaction payload wraps JSON in a `payload` form field.
+- `toFixed(2)` does NOT add thousand separators — use `toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })` for "1,234.56" format.
+- 15 new tests (10 SlackBotHandler + 5 SlackWorkspaceRegistry), total messenger-bot: 38 tests.
+- createMessengerBotApp() now accepts optional SlackWorkspaceRegistry and sets up both Telegram and Slack routes.

@@ -1,0 +1,43 @@
+T26: Slack Bot Integration — Evidence
+=====================================
+Date: 2026-03-12
+
+## Files Created/Modified
+- packages/messenger-bot/src/slack.ts (NEW) — SlackBotHandler, SlackWorkspaceRegistry, Block Kit types
+- packages/messenger-bot/src/slack.test.ts (NEW) — 15 tests (10 SlackBotHandler + 5 SlackWorkspaceRegistry)
+- packages/messenger-bot/src/index.ts (MODIFIED) — Added slack exports + Hono routes
+
+## Test Results
+- Total: 38 pass, 0 fail (23 existing + 15 new)
+- 95 expect() calls
+- Ran across 3 files in ~114ms
+
+## Build Results
+- bun run build --filter=@aoa/messenger-bot: SUCCESS
+- Bundled 30 modules in 27ms → dist/index.js (63.46 KB)
+- tsc --emitDeclarationOnly: SUCCESS (no type errors)
+
+## Implementation Summary
+### SlackBotHandler
+- handleSlashCommand(payload) → Block Kit response for /aoa commands
+- handleInteraction(payload) → Block Kit response for button clicks
+- Supported intents: BALANCE_QUERY, PAYMENT, POLICY_QUERY, HISTORY, AGENT_STATUS, UNKNOWN
+- Payment response includes confirm/cancel action buttons
+- Unlinked users get ephemeral linking instructions
+
+### SlackWorkspaceRegistry
+- In-memory Map<string, string> for Slack user_id ↔ AOA account_id
+- Methods: register, lookup, isRegistered, unregister, clear
+
+### Hono Routes
+- POST /api/v1/slack/commands — Slash command handler (form-urlencoded)
+- POST /api/v1/slack/interactions — Interactive payload handler (form-urlencoded with JSON payload)
+
+### Block Kit Format
+- Section blocks with mrkdwn text
+- Divider blocks between sections
+- Actions blocks with button elements (confirm/cancel payment)
+- response_type: "ephemeral" (private) or "in_channel" (public, for payments)
+
+## Gotcha Found
+- toFixed(2) doesn't add thousand separators → used toLocaleString("en-US") for SGD 1,234.56 format
