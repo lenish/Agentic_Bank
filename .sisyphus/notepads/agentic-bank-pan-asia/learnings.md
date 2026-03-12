@@ -120,3 +120,9 @@
 - Frozen checks use assertNotFrozen() for early rejection with specific error ("Sub-account is frozen") before delegating to LedgerService which also rejects frozen accounts generically.
 - All fund movements use metadata tagging: { type: "allocation"|"recall"|"spend", purpose: string }.
 - 10 tests written (exceeds 8 minimum). QA scenario covers full lifecycle: fund master → create sub → allocate → over-limit reject → spend → verify trial balance = 0.
+
+## [2026-03-12] Task 11 — Settlement Signing Service
+- Ed25519 signing in Bun uses Node crypto APIs directly: `generateKeyPairSync("ed25519")`, `sign(null, payloadBuffer, privateKey)`, `verify(null, payloadBuffer, publicKey, signatureBuffer)`.
+- Step-up threshold is reused as integer SGD cents (`10_000_00` = 1,000,000 cents = 10,000 SGD) and enforced only for amounts above threshold.
+- Key rotation keeps old public keys indexed by version and verifies signatures by trying each known public key version.
+- Signing logs are append-only and should return defensive copies (`Date` + metadata clone) to avoid external mutation.

@@ -1,0 +1,35 @@
+Task: T11 - Signing service (HSM/KMS integration)
+Date: 2026-03-12
+
+Changed files:
+- packages/settlement/src/signing.ts
+- packages/settlement/src/signing.test.ts
+- packages/settlement/src/index.ts
+- .sisyphus/notepads/agentic-bank-pan-asia/learnings.md
+
+Acceptance evidence:
+1) SigningService implemented with:
+   - generateKeyPair(keyId): Ed25519 key generation and in-memory storage
+   - sign(keyId, payload, policyApproved, stepUpToken?): policy gate + step-up gate
+   - verify(keyId, payload, signature): signature verification via stored public keys
+   - rotateKey(keyId): key version rotation preserving old public keys
+   - getSigningLog(): append-only log retrieval via defensive copy
+
+2) Required error behavior:
+   - POLICY_NOT_APPROVED when policyApproved=false
+   - STEP_UP_REQUIRED when amount_sgd_cents > 10_000_00 and stepUpToken is missing
+
+3) Key rotation behavior:
+   - Old signatures remain verifiable after rotateKey()
+
+4) Tests:
+   Command: export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/settlement
+   Result: PASS (11 tests, 0 fail)
+
+5) Build:
+   Command: export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/settlement
+   Result: PASS (exit 0)
+
+6) LSP diagnostics:
+   - typescript-language-server is not installed in this environment.
+   - Attempted lsp_diagnostics on changed TS files, but tool returned unavailable-server error.
