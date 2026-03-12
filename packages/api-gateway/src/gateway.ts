@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Hono, type Context } from "hono";
 import { authMiddleware } from "./middleware/auth";
 import {
   capabilityMiddleware,
@@ -38,6 +38,14 @@ export interface GatewayOptions {
 interface PaymentIssue {
   readonly path: ReadonlyArray<string>;
   readonly message: string;
+}
+
+function toServiceUnavailable(c: Context) {
+  return c.json(
+    { error: "SERVICE_UNAVAILABLE", message: "Temporary downstream unavailability" },
+    503,
+    { "Retry-After": "5" },
+  );
 }
 
 const paymentSchema: ValidationSchema = {
@@ -152,41 +160,46 @@ export function createGateway(options: GatewayOptions): Hono {
       const capabilityId = c.req.header("X-Capability-Id") ?? "";
       const idempotencyKey = c.req.header("X-Idempotency-Key") ?? paymentId;
 
-      const result = await options.paymentPipeline.execute(
-        {
-          payment_id: paymentId,
-          agent_id:
-            typeof body.agent_id === "string" && body.agent_id.trim()
-              ? body.agent_id
-              : "agent-unknown",
-          capability_id: capabilityId,
-          amount_sgd_cents: amount,
-          counterparty_id: counterpartyId,
-          action:
-            typeof body.action === "string" && body.action.trim()
-              ? body.action
-              : "PAYMENT_TRANSFER",
-          idempotency_key: idempotencyKey,
-        },
-        {
-          svid: bearerToken,
-          policy_id:
-            typeof body.policy_id === "string" && body.policy_id.trim()
-              ? body.policy_id
-              : undefined,
-          sender_account:
-            typeof body.sender_account === "string" && body.sender_account.trim()
-              ? body.sender_account
-              : undefined,
-          receiver_account:
-            typeof body.receiver_account === "string" && body.receiver_account.trim()
-              ? body.receiver_account
-              : undefined,
-        },
-      );
+      try {
+        const result = await options.paymentPipeline.execute(
+          {
+            payment_id: paymentId,
+            agent_id:
+              typeof body.agent_id === "string" && body.agent_id.trim()
+                ? body.agent_id
+                : "agent-unknown",
+            capability_id: capabilityId,
+            amount_sgd_cents: amount,
+            counterparty_id: counterpartyId,
+            action:
+              typeof body.action === "string" && body.action.trim()
+                ? body.action
+                : "PAYMENT_TRANSFER",
+            idempotency_key: idempotencyKey,
+          },
+          {
+            svid: bearerToken,
+            policy_id:
+              typeof body.policy_id === "string" && body.policy_id.trim()
+                ? body.policy_id
+                : undefined,
+            sender_account:
+              typeof body.sender_account === "string" && body.sender_account.trim()
+                ? body.sender_account
+                : undefined,
+            receiver_account:
+              typeof body.receiver_account === "string" && body.receiver_account.trim()
+                ? body.receiver_account
+                : undefined,
+          },
+        );
 
-      const statusCode = result.status === "SETTLED" ? 201 : result.status === "HELD" ? 202 : 422;
-      return c.json(result, statusCode);
+        const statusCode =
+          result.status === "SETTLED" ? 201 : result.status === "HELD" ? 202 : 422;
+        return c.json(result, statusCode);
+      } catch {
+        return toServiceUnavailable(c);
+      }
     },
   );
 

@@ -265,6 +265,14 @@
 - Control matrix identifies 23 IMPLEMENTED controls, 1 PARTIAL (human-in-the-loop UI), and 2 PLANNED (reporting/wind-down execution).
 - Evidence index provides a structured map for MAS auditors to verify AML, KYA, and Audit Trail integrity.
 
+## [2026-03-12] Task 30 — Load/Stress Testing + SLO Tuning
+- Added `packages/api-gateway/src/load-test.ts` with reusable load runner using `Promise.all` concurrency workers and Hono `app.request()` (no real HTTP server).
+- Baseline profile used for SLO verification: `100` concurrent users and `1000` total requests for both `GET /health` and `POST /api/v1/payments`.
+- Observed in-memory latency from script run: health `p50=0.92ms`, `p95=1.04ms`, `p99=1.36ms`; payments `p50=1.89ms`, `p95=4.14ms`, `p99=4.36ms`.
+- Added `packages/api-gateway/src/load-test.test.ts` with 3 tests: health SLO, payments SLO, and graceful degradation (`503` + `Retry-After`) when a downstream dependency throws.
+- Gateway now catches unexpected payment pipeline exceptions and returns sanitized `SERVICE_UNAVAILABLE` response with retry guidance.
+- Rate limiter can distort load tests at default settings; for perf tests use dedicated higher window (`maxRequests: 10_000`, `windowMs: 60_000`) to avoid intentional `429` noise.
+
 ## [2026-03-12] Task 31 — Model Risk Governance Registry
 - `ModelRegistry` in `@aoa/risk` follows existing in-memory Phase 1 pattern: `Map<string, ModelRecord>` primary store + per-type active pointer.
 - Approval workflow is stateful and explicit: `register -> PENDING_APPROVAL`, `approve -> APPROVED + approved_at`, `reject -> REJECTED`, `kill -> KILLED + killed_at + kill_reason`.
