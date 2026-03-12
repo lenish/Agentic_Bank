@@ -14,3 +14,11 @@ export {
 } from "./state-machine";
 export { AgentWalletService } from "./wallet";
 export type { SubAccountRecord } from "./wallet";
+export {
+  ReconciliationEngine,
+  type LedgerRecord,
+  type ProviderRecord,
+  type ReconciliationBreak,
+  type ReconciliationBreakType,
+  type ReconciliationReport,
+} from "./reconciliation";

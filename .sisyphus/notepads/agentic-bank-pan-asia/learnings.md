@@ -214,3 +214,11 @@
 - Evidence can only be added in EVIDENCE_GATHERING (or RECEIVED) state — not after SUBMITTED or RESOLVED.
 - 14 new tests (exceeds 8 minimum): auto-accept, threshold boundary, full lifecycle, agent filtering, state transition errors, SLA breach detection, validation, edge cases.
 - Total compliance tests: 55 (11 decision-record + 14 AML + 16 travel-rule + 14 dispute).
+
+## [2026-03-12] Task 22 — Reconciliation Engine
+- ReconciliationEngine in `@aoa/ledger` matches by `payment_id` (ledger) to `reference_id` (provider) and classifies four break types: AMOUNT_MISMATCH, MISSING_IN_PROVIDER, MISSING_IN_LEDGER, TIMING_MISMATCH.
+- Timing mismatch behavior is explicit: same amount with settlement delta `< 24h` is auto-matched and excluded from manual queue; `>= 24h` remains a timing break for manual review.
+- Manual review queue is retained in engine memory as cumulative non-auto-matched breaks across reconciliation runs; per-run report also includes a run-scoped `manual_review_queue` snapshot.
+- `generateDailyReport(date)` returns markdown with run count, aggregate totals, and manual review item lines for the selected UTC day.
+- Added 9 reconciliation tests in `reconciliation.test.ts` (including 100-record happy path and 500 SGD vs 450 SGD QA mismatch case); ledger package tests now pass at 27/27.
+- LSP diagnostics cannot execute in this environment (`typescript-language-server` missing), so verification used `bun run build --filter=@aoa/ledger` (`tsc --emitDeclarationOnly`) as strict type gate.

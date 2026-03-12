@@ -1,0 +1,27 @@
+Task: T22 Reconciliation Engine
+Date: 2026-03-12
+
+Implemented files:
+- packages/ledger/src/reconciliation.ts
+- packages/ledger/src/reconciliation.test.ts
+- packages/ledger/src/index.ts (export update)
+
+QA break-detection scenario validated:
+- Ledger record: payment_id=qa-payment, amount=50_000 (500 SGD)
+- Provider record: reference_id=qa-payment, amount=45_000 (450 SGD)
+- Result: break_type=AMOUNT_MISMATCH, auto_matched=false
+- Manual queue: 1 item created
+
+Verification commands:
+1) export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/ledger
+   - Result: PASS (27 tests, 0 fail)
+   - Existing tests: 18 pass
+   - New reconciliation tests: 9 pass
+
+2) export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/ledger
+   - Result: PASS (exit 0)
+   - Build command executed by package: bun build src/index.ts --outdir dist --target bun && tsc --emitDeclarationOnly
+
+Diagnostics note:
+- `lsp_diagnostics` unavailable in this environment due to missing `typescript-language-server` binary.
+- Type safety validated via package build (`tsc --emitDeclarationOnly`) with no errors.
