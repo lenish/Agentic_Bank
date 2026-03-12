@@ -28,3 +28,11 @@ export type {
   CounterpartyVerification,
   TravelRuleEvalResult,
 } from "./travel-rule";
+
+// Dispute / Case Management — lifecycle + auto-accept + SLA tracking
+export { DisputeService } from "./dispute";
+export type {
+  DisputeCase,
+  DisputeResolution,
+  CreateDisputeInput,
+} from "./dispute";

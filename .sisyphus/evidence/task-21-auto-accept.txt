@@ -1,0 +1,34 @@
+Task 21: Dispute/Case Management Service — Evidence
+====================================================
+Date: 2026-03-12
+Package: @aoa/compliance
+
+Files Created:
+  - packages/compliance/src/dispute.ts (DisputeService class)
+  - packages/compliance/src/dispute.test.ts (14 tests)
+
+Files Modified:
+  - packages/compliance/src/index.ts (added DisputeService exports)
+
+Test Results (55 pass, 0 fail):
+  - 41 existing tests (decision-record, aml, travel-rule) — all pass
+  - 14 new dispute tests — all pass
+
+Build: exit 0 (bun build + tsc --emitDeclarationOnly)
+
+Acceptance Criteria Verified:
+  ✅ Auto-accept: 30 SGD (3,000 cents) → status=RESOLVED, resolution=AUTO_REFUND
+  ✅ Threshold boundary: 50 SGD (5,000 cents) → NOT auto-accepted (strictly less than)
+  ✅ 1,000 SGD dispute → status=EVIDENCE_GATHERING, respond_by_at set (5 biz days)
+  ✅ Full lifecycle: EVIDENCE_GATHERING → addEvidence → SUBMITTED → RESOLVED
+  ✅ State transitions enforced (invalid transitions throw DISPUTE_INVALID_STATE)
+  ✅ SLA breach detection: cases past respond_by_at and not RESOLVED
+  ✅ SLA excludes resolved cases
+  ✅ Input validation: empty payment_id, negative amount → throws
+  ✅ getDisputesByAgent filters correctly
+  ✅ getDispute returns undefined for unknown case_id
+  ✅ addEvidence throws for non-existent and RESOLVED cases
+
+QA Scenarios:
+  1. 30 SGD payment → file dispute → status='RESOLVED', resolution='AUTO_REFUND' ✅
+  2. 1,000 SGD dispute → respond_by_at field exists, status='EVIDENCE_GATHERING' ✅

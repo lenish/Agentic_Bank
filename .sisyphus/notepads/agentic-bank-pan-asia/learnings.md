@@ -205,3 +205,12 @@
 - MockRailAdapter validates required fields in sendTravelRuleData() and returns FAILED for empty fields (defensive mock).
 - 16 new tests (exceeds 8 minimum): 3 MockRailAdapter, 13 TravelRuleService (threshold boundary, validation, E2E, zero-PII).
 - Total compliance tests: 41 (11 decision-record + 14 AML + 16 travel-rule).
+
+## [2026-03-12] Task 21 — Dispute/Case Management Service
+- DisputeService follows AmlEngine pattern: class with Map-based in-memory store, case IDs prefixed `DSP-`.
+- Auto-accept threshold: < 5,000 cents (50 SGD) → immediate RESOLVED + AUTO_REFUND. At threshold → not auto-accepted (strictly less than).
+- SLA deadline uses `addBusinessDays()` helper that skips Saturday (6) and Sunday (0).
+- State machine: EVIDENCE_GATHERING → SUBMITTED → RESOLVED. Auto-accepted disputes skip directly to RESOLVED.
+- Evidence can only be added in EVIDENCE_GATHERING (or RECEIVED) state — not after SUBMITTED or RESOLVED.
+- 14 new tests (exceeds 8 minimum): auto-accept, threshold boundary, full lifecycle, agent filtering, state transition errors, SLA breach detection, validation, edge cases.
+- Total compliance tests: 55 (11 decision-record + 14 AML + 16 travel-rule + 14 dispute).
