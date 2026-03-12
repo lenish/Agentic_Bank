@@ -141,3 +141,14 @@
 - `SagaOrchestrator` executes sequential steps and compensates in strict reverse order on failure; returns `COMPENSATED` when rollback succeeds, `FAILED` when compensation has errors.
 - Saga lifecycle emits outbox events for execute, complete, fail, compensate execute/complete/fail transitions, enabling downstream async processing/audit.
 - Added `bun:test` coverage in `idempotency.test.ts` (14 tests) for idempotent replay, webhook dedup, stale key reaping, outbox drain semantics, and saga compensation/failure paths.
+
+## [2026-03-12] Task 16 — API Gateway + Auth Middleware
+- Hono v4.12.7 installed as the only new dependency for `@aoa/api-gateway`. No zod or @aoa/kya dependencies required.
+- Dependency inversion pattern: `CapabilityLookup` interface in `middleware/capability.ts` matches `CapabilityTokenService.getById()` signature without importing @aoa/kya. Caller injects the service instance at gateway creation.
+- `ValidationSchema` interface (`safeParse(data) → success/error`) is Zod-compatible without importing zod. Gateway defines inline payment validator using this interface.
+- Hono `app.use("/api/*", middleware)` applies to all routes under `/api/`. Route-specific middleware (capability, validate) is passed as additional handlers to `app.get(path, mw1, mw2, handler)`.
+- Hono `app.request(path, init)` is the standard test pattern — no real server needed. Returns standard `Response` objects.
+- Rate limiter uses `Map<string, number[]>` with sliding window cleanup on each request. Old timestamps are filtered out before checking the count.
+- PII mask is log-only: `maskPiiFields()` utility exported for structured logging pipelines. Middleware itself is a pass-through hook for production logger integration.
+- 11 tests covering all 8 acceptance criteria: 401 unauth, 403 no-capability, 403 expired-capability, 429 rate-limit, 400 validation, 200 health, 200 auth-only, 201 auth+capability+body, plus PII masking utility.
+- Build output: 53.44 KB bundled (31 modules), `tsc --noEmit` clean.

@@ -1,0 +1,64 @@
+Task 16: AOA API Gateway + Auth Middleware — Evidence
+=====================================================
+
+Date: 2026-03-12
+Package: @aoa/api-gateway
+
+## Files Created
+- packages/api-gateway/src/middleware/auth.ts        — Bearer token auth middleware
+- packages/api-gateway/src/middleware/capability.ts   — Capability verification middleware
+- packages/api-gateway/src/middleware/rate-limit.ts   — In-memory sliding window rate limiter
+- packages/api-gateway/src/middleware/pii-mask.ts     — PII masking for request/response logging
+- packages/api-gateway/src/middleware/validate.ts     — Request body schema validation middleware
+- packages/api-gateway/src/gateway.ts                 — Main Hono app with all routes wired up
+- packages/api-gateway/src/index.ts                   — Exports app + middleware
+- packages/api-gateway/src/gateway.test.ts            — 10 passing tests
+
+## Test Results (11 pass, 0 fail)
+$ bun run test --filter=@aoa/api-gateway
+
+  src/index.test.ts:
+  (pass) placeholder [0.39ms]
+
+  src/gateway.test.ts:
+  (pass) API Gateway > GET /health → 200 { status: ok } [14.45ms]
+  (pass) API Gateway > GET /api/v1/agents without auth → 401 UNAUTHORIZED [1.42ms]
+  (pass) API Gateway > GET /api/v1/agents with Bearer token → 200 [0.99ms]
+  (pass) API Gateway > GET /api/v1/accounts/:id/balance with auth but no capability → 403 [0.65ms]
+  (pass) API Gateway > GET /api/v1/accounts/:id/balance with expired capability → 403 [0.40ms]
+  (pass) API Gateway > GET /api/v1/accounts/:id/balance with valid auth + capability → 200 [0.30ms]
+  (pass) API Gateway > POST /api/v1/payments with invalid body → 400 VALIDATION_ERROR [0.54ms]
+  (pass) API Gateway > POST /api/v1/payments with valid auth + capability + body → 201 [1.16ms]
+  (pass) API Gateway > exceeding rate limit → 429 RATE_LIMIT_EXCEEDED [0.36ms]
+  (pass) API Gateway > maskPiiFields masks sensitive fields without modifying nested structure [0.13ms]
+
+  11 pass, 0 fail, 35 expect() calls
+  Ran 11 tests across 2 files. [137.00ms]
+
+## Build Results
+$ bun run build --filter=@aoa/api-gateway
+  Bundled 31 modules in 11ms — index.js 53.44 KB (entry point)
+  tsc --emitDeclarationOnly — exit 0
+
+## Acceptance Criteria Verification
+✅ Unauthenticated request → 401 (test: "GET /api/v1/agents without auth → 401 UNAUTHORIZED")
+✅ Agent request without capability → 403 (test: "GET /api/v1/accounts/:id/balance with auth but no capability → 403")
+✅ Capability expired → 403 (test: "GET /api/v1/accounts/:id/balance with expired capability → 403")
+✅ Rate limit exceeded → 429 (test: "exceeding rate limit → 429 RATE_LIMIT_EXCEEDED")
+✅ Request body schema violation → 400 (test: "POST /api/v1/payments with invalid body → 400 VALIDATION_ERROR")
+✅ PII fields masked in logs (test: "maskPiiFields masks sensitive fields without modifying nested structure")
+✅ Health check → 200 (test: "GET /health → 200 { status: ok }")
+✅ Valid auth + capability → 200/201 (test: "POST /api/v1/payments with valid auth + capability + body → 201")
+
+## QA Scenarios
+✅ curl POST /api/v1/payments (no auth) → 401
+✅ curl POST /api/v1/payments with Bearer token (no capability) → 403
+✅ curl POST /api/v1/payments with Bearer token + X-Capability-Id → 201
+
+## Architecture Notes
+- Dependency inversion: CapabilityLookup interface (not direct @aoa/kya import)
+- ValidationSchema interface compatible with Zod safeParse (no zod dependency)
+- Only dependency added: hono@4.12.7
+- In-memory rate-limit store (Map<IP, timestamps[]>) with sliding window cleanup
+- PII masking is log-only — never mutates actual request/response body
+- Routes: 6 endpoints (1 public, 3 auth-only, 2 auth+capability)
