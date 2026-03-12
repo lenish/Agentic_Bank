@@ -8,3 +8,13 @@ export type {
 } from "./schema";
 export type { DecisionStore } from "./store";
 export { createDecisionStore } from "./store";
+
+// AML Rule Engine — FATF typology detection + manual review queue
+export { AmlEngine } from "./aml";
+export type {
+  AmlEvalInput,
+  AmlEvalResult,
+  AmlTypology,
+  AmlCase,
+  AmlCaseStatus,
+} from "./aml";

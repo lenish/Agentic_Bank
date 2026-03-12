@@ -1,0 +1,43 @@
+Task 19: AML Rule Engine v1 — Evidence
+=======================================
+
+Test run: 25 pass, 0 fail (11 existing DecisionRecord + 14 new AML)
+Build: exit 0 (bun build + tsc --emitDeclarationOnly)
+
+Structuring Detection Evidence:
+  Input: 5 transactions [190k, 185k, 200k, 180k, 170k] cents
+  Each < 1,000,000 cents (10,000 SGD) ✓
+  Total = 925,000 cents (9,250 SGD) > 900,000 cents (9,000 SGD) ✓
+  Result: ALRT, typology=structuring, case_id=AML-XXXXXXXX ✓
+
+Account Takeover Evidence:
+  3 evaluations with same agent_id, different counterparties
+  First 2: NALT (below threshold)
+  Third: ALRT, typology=account_takeover ✓
+
+Mule Activity Evidence:
+  amount=5,100,000 cents (51k SGD) > 5,000,000 threshold
+  counterparty_id starts with 'unknown-'
+  Result: ALRT, typology=mule_activity ✓
+  Known counterparty with same amount: NALT ✓
+
+Rapid Movement Evidence:
+  last_hour_count=11 > 10 threshold
+  Result: ALRT, typology=rapid_movement ✓
+
+Manual Review Queue Evidence:
+  ALRT → case created with status=PENDING_REVIEW ✓
+  resolveCase() → status=REVIEWED, removed from pending queue ✓
+  resolveCase(unknown) → throws AML_CASE_NOT_FOUND ✓
+
+ISO 20022 pain.001 Evidence:
+  Valid message: passes evaluation without error ✓
+  Missing originator_name: throws AML_PAIN001_ORIGINATOR_NAME_REQUIRED ✓
+  Missing currency: throws AML_PAIN001_CURRENCY_REQUIRED ✓
+
+Input Validation Evidence:
+  Empty agent_id: throws AML_AGENT_ID_REQUIRED ✓
+  Negative amount: throws AML_AMOUNT_INVALID ✓
+
+NALT (normal pass) Evidence:
+  Clean transaction: status=NALT, reason_codes=[AML_CHECK_PASS], no case_id ✓

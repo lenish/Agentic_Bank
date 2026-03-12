@@ -187,3 +187,12 @@
 - Gateway integration remains backward-compatible by keeping `/api/v1/payments` fallback behavior (`status: initiated`) when no `paymentPipeline` is injected.
 - Added 10 integration tests for pipeline (happy path, idempotency replay, policy deny, risk hold/block, settlement submit/confirm failure, ledger failure, KYA mismatch, p95 latency).
 - TypeScript LSP diagnostics tool cannot run in this environment because `typescript-language-server` is not installed; compensated with `tsc --noEmit` lint pass.
+
+## Task 19: AML Rule Engine v1
+- AmlEngine follows RiskEngine pattern: class with evaluate() method, validate inputs, return typed result.
+- 4 FATF typology rules (structuring, account_takeover, mule_activity, rapid_movement) evaluated in priority order — first match wins.
+- Manual review queue uses in-memory Map<case_id, AmlCase> — no auto-SAR, human review mandatory.
+- Account takeover detection requires stateful tracking (agentCounterparties Map) across evaluate() calls within engine lifetime.
+- ISO 20022 pain.001 validation is separate from AML rules — validates message structure, throws on missing required fields.
+- TS strict mode: optional fields (`case_id?: string`) need `as string` assertion in tests after `expect().toBeDefined()` — `toBe()` overload rejects `string | undefined`.
+- 14 new tests (exceeds 8 minimum) covering all 4 rules, review queue lifecycle, pain.001 validation, input validation, and clean NALT path.
