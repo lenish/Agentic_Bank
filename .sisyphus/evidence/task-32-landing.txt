@@ -1,0 +1,34 @@
+Task 32: Landing Page and GTM Marketing Materials
+===================================================
+Date: 2026-03-12
+
+Files Created:
+- packages/dashboard/src/landing.tsx — React landing page component
+- packages/dashboard/src/landing-server.ts — Hono server for landing page
+- packages/dashboard/src/landing.test.ts — 7 tests (5 component + 2 server)
+- docs/gtm/one-pager.md — Executive one-pager
+- docs/gtm/datasheet.md — Technical datasheet
+- docs/gtm/api-quickstart.md — API quickstart guide
+
+Files Modified:
+- packages/dashboard/src/index.ts — Added LandingPage, LandingPageProps, createLandingServer exports
+
+Test Results:
+  39 pass, 0 fail, 93 expect() calls
+  Ran 39 tests across 6 files [159.00ms]
+
+  Landing-specific tests (7/7 pass):
+  - LandingPage > renders hero title
+  - LandingPage > renders trust signals section
+  - LandingPage > renders CTA button with default url
+  - LandingPage > renders features section with 7 layers
+  - LandingPage > renders pricing section with Free and Pro tiers
+  - LandingServer > GET / returns HTML with landing page
+  - LandingServer > GET /api/pilot-apply returns 200
+
+Build Results:
+  Bundled 43 modules in 18ms
+  index.js 0.80 MB (entry point)
+  tsc --emitDeclarationOnly passed
+
+Verification: PASS

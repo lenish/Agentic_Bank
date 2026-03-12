@@ -298,3 +298,10 @@
 - Dashboard PricePage component uses static FEATURES array for comparison table — 8 feature rows comparing Free vs Pro.
 - api-gateway tests: 37 total (13 new pricing + 21 existing gateway/pipeline + 3 load tests).
 - dashboard tests: 32 total (4 new price-page + 28 existing).
+
+## [2026-03-12] Task 32 — Landing Page and GTM Materials
+- Landing page follows same pattern as maturity-ladder.tsx: no `import React` needed with `react-jsx` transform.
+- Tests use `createElement` from react (not `React.createElement`) consistent with maturity.test.ts pattern.
+- Landing server uses same Hono pattern as pipeline-server.ts and kpi-server.ts.
+- GTM docs created: one-pager (exec summary), datasheet (technical specs), api-quickstart (developer guide).
+- Dashboard tests: 39 total (7 new landing + 32 existing). Build: 43 modules, 0.80 MB.
