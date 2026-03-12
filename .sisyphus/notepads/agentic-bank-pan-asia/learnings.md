@@ -230,3 +230,10 @@
 - Hono KPI API pattern mirrors existing dashboard server style: in-memory aggregator instance, `app.request()` friendly routes, and input validation returning 400 on malformed payload/query.
 - Added 9 KPI-focused tests (aggregator + API) with `bun:test`; dashboard package now passes 16 tests total.
 - LSP diagnostics remain unavailable locally due to missing `typescript-language-server`; verification continues via package build/type emission.
+
+## [2026-03-12] Task 24 — Maturity Ladder UX (4-stage autonomy)
+- Avoid module-name collisions when both `maturity.ts` and `maturity.tsx` exist: Bun resolves `./maturity` to the TSX module first in this package context.
+- Stable pattern used: keep canonical service/types in `maturity-service.ts`, keep required `maturity.ts` as a re-export barrel, and expose UI from `maturity-ladder.tsx` with required `maturity.tsx` as a re-export.
+- `MaturityLadderService.transition()` enforces one-step forward progression only (`targetIndex === currentIndex + 1`) to match upgrade-ladder UX semantics.
+- `renderToStaticMarkup` + `React.createElement` is a reliable `bun:test` pattern for TS (`.ts`) component tests without requiring DOM/jsdom.
+- LSP diagnostics check attempted on all changed dashboard files, but local environment still lacks `typescript-language-server`; `bun run build --filter=@aoa/dashboard` passed as type-safety gate.

@@ -1,0 +1,41 @@
+Task: T24 - Maturity ladder UX (4-stage autonomy)
+Date: 2026-03-12
+
+Implemented files:
+- packages/dashboard/src/maturity.ts (required file; re-export barrel for service types)
+- packages/dashboard/src/maturity.tsx (required file; re-export for component)
+- packages/dashboard/src/maturity.test.ts (12 tests)
+
+Additional implementation files:
+- packages/dashboard/src/maturity-service.ts (MaturityLadderService + stage model)
+- packages/dashboard/src/maturity-ladder.tsx (MaturityLadder React component)
+
+Modified files:
+- packages/dashboard/src/index.ts (exports MaturityLadderService + MaturityLadder)
+
+Verification:
+1) Tests
+Command:
+  export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/dashboard
+Result:
+  PASS - 28 tests total in @aoa/dashboard (existing suites + 12 new maturity tests)
+
+2) Build
+Command:
+  export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/dashboard
+Result:
+  PASS - build succeeded (bun build + tsc --emitDeclarationOnly)
+
+3) LSP diagnostics
+Command/tool:
+  lsp_diagnostics on changed TypeScript/TSX files
+Result:
+  BLOCKED by environment - `typescript-language-server` not installed.
+  Compensating control: package build/type emission passed clean.
+
+Acceptance criteria coverage:
+- 4-stage visualization renders with `.maturity-stage` cards.
+- Current stage renders with `.maturity-stage.current`.
+- Next-stage requirements are displayed.
+- Upgrade path uses forward-only stage transition and applies stage auto policies.
+- RULE_ONLY -> ASSISTED transition verified in tests and returns expected policy set.
