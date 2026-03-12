@@ -1,0 +1,74 @@
+TASK-14 EVIDENCE: Settlement State Machine + SGD Rail Adapter + Escrow
+=====================================================================
+Generated: 2026-03-12
+Status: PASS
+
+## Files Created/Modified
+
+1. packages/settlement/src/state-machine.ts (NEW)
+   - SettlementStateMachine class with 7 states: INITIATED, AUTHORIZED, HELD, RELEASING, SETTLED, REFUNDED, DISPUTED
+   - Escrow support: holdEscrow(), releaseEscrow(), checkAndAutoRelease(), confirmOracle()
+   - EscrowConditionType: TIME_RELEASE | ORACLE_CONFIRM
+   - Full transition history with timestamps
+
+2. packages/settlement/src/sgd-rail.ts (NEW)
+   - SgdRailAdapter class implementing RailAdapter interface
+   - Sandbox simulator with configurable success rate (default 95%)
+   - submit(), confirm(), refund() methods
+   - All amounts in SGD cents (integer)
+
+3. packages/settlement/src/state-machine.test.ts (NEW)
+   - 19 tests across 3 describe blocks
+
+4. packages/settlement/src/index.ts (MODIFIED)
+   - Added exports for state-machine and sgd-rail modules
+
+## Acceptance Criteria Verification
+
+✅ State transitions only follow allowed paths
+   - INITIATED → AUTHORIZED (only)
+   - AUTHORIZED → HELD | RELEASING
+   - HELD → RELEASING | REFUNDED | DISPUTED
+   - RELEASING → SETTLED | REFUNDED
+   - SETTLED → DISPUTED (only)
+   - REFUNDED → (terminal)
+   - DISPUTED → REFUNDED | SETTLED (resolution)
+   - Invalid transitions throw "INVALID_TRANSITION"
+
+✅ SGD rail adapter E2E (sandbox simulator) works
+   - submit → PENDING → confirm → SETTLED
+   - refund → REFUNDED
+   - Configurable success rate (0.0 to 1.0)
+
+✅ Escrow hold → condition met → release
+   - TIME_RELEASE: holds until expiresAt, auto-releases when expired
+   - ORACLE_CONFIRM: holds until confirmOracle() called, then releases
+   - checkAndAutoRelease() for cron-style auto-release
+
+✅ Provider adapter swap requires no upstream logic change
+   - RailAdapter interface: submit(), confirm(), refund()
+   - SgdRailAdapter implements RailAdapter
+
+✅ All settlement decisions recorded
+   - Full transition history with timestamps and metadata
+   - Escrow conditions recorded in transition metadata
+
+## QA Scenarios Verified
+
+1. INITIATED → AUTHORIZED → HELD → RELEASING → SETTLED (valid path) ✅
+2. SETTLED → INITIATED (invalid) → error "INVALID_TRANSITION" ✅
+3. Hold with TIME_RELEASE, wait, auto-release → RELEASING ✅
+
+## Test Results
+
+$ bun run test --filter=@aoa/settlement
+44 pass, 0 fail, 96 expect() calls
+Ran 44 tests across 4 files [124.00ms]
+(25 existing + 19 new)
+
+## Build Results
+
+$ bun run build --filter=@aoa/settlement
+Bundled 7 modules in 7ms
+index.js 17.85 KB
+tsc --emitDeclarationOnly: success

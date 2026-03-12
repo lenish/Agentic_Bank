@@ -152,3 +152,11 @@
 - PII mask is log-only: `maskPiiFields()` utility exported for structured logging pipelines. Middleware itself is a pass-through hook for production logger integration.
 - 11 tests covering all 8 acceptance criteria: 401 unauth, 403 no-capability, 403 expired-capability, 429 rate-limit, 400 validation, 200 health, 200 auth-only, 201 auth+capability+body, plus PII masking utility.
 - Build output: 53.44 KB bundled (31 modules), `tsc --noEmit` clean.
+
+## [2026-03-12] Task 14 — Settlement State Machine + SGD Rail Adapter
+- SettlementStateMachine has different transition rules from ledger's TransactionStateMachine: settlement adds AUTHORIZED → RELEASING shortcut, SETTLED → DISPUTED, and DISPUTED → REFUNDED|SETTLED resolution paths.
+- Escrow support with two condition types: TIME_RELEASE (auto-releases via checkAndAutoRelease when expiresAt < now) and ORACLE_CONFIRM (manual confirmOracle then releaseEscrow).
+- SgdRailAdapter implements RailAdapter interface for provider abstraction. Sandbox simulator uses configurable success rate (default 0.95). 100% rate used in tests for determinism.
+- Rail adapter returns discriminated union results: success types (PENDING, SETTLED, REFUNDED) vs RailFailureResult { status: 'FAILED', reason: string }. No exceptions for expected failures.
+- State machine stores full transition history with metadata (action type, escrow condition details) for audit trail.
+- 19 new tests added (total 44 in settlement package). Tests cover all 3 QA scenarios from plan.
