@@ -1,0 +1,42 @@
+$ turbo test "--filter=@aoa/kya"
+• turbo 2.8.16
+• Packages in scope: @aoa/kya
+• Running test in 1 packages
+• Remote caching disabled
+@aoa/kya:test: cache bypass, force executing 2c1dcbc55da0d32f
+@aoa/kya:test: $ bun test
+@aoa/kya:test: bun test v1.3.10 (30e609e0)
+@aoa/kya:test: 
+@aoa/kya:test: src/index.test.ts:
+@aoa/kya:test: (pass) AgentIdentity > issues SPIFFE ID with expiry claim and validates format [5.39ms]
+@aoa/kya:test: (pass) AgentIdentity > rejects revoked agent SVID [0.93ms]
+@aoa/kya:test: (pass) KYAStateMachine > allows PENDING -> VERIFIED -> REVOKED transitions [0.04ms]
+@aoa/kya:test: (pass) KYAStateMachine > throws on REVOKED -> VERIFIED transition [0.04ms]
+@aoa/kya:test: (pass) StepUpAuth > triggers step-up on high amount and new counterparty [0.03ms]
+@aoa/kya:test: (pass) StepUpAuth > does not trigger step-up on normal transfer [0.02ms]
+@aoa/kya:test: 
+@aoa/kya:test:  6 pass
+@aoa/kya:test:  0 fail
+@aoa/kya:test:  14 expect() calls
+@aoa/kya:test: Ran 6 tests across 1 file. [118.00ms]
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    185ms 
+
+$ turbo build "--filter=@aoa/kya"
+• turbo 2.8.16
+• Packages in scope: @aoa/kya
+• Running build in 1 packages
+• Remote caching disabled
+@aoa/kya:build: cache miss, executing be3d2aa3030f9f0f
+@aoa/kya:build: $ bun build src/index.ts --outdir dist --target bun && tsc --emitDeclarationOnly
+@aoa/kya:build: Bundled 5 modules in 9ms
+@aoa/kya:build: 
+@aoa/kya:build:   index.js  5.89 KB  (entry point)
+@aoa/kya:build: 
+
+ Tasks:    1 successful, 1 total
+Cached:    0 cached, 1 total
+  Time:    493ms 
+

@@ -28,3 +28,29 @@
 - turbo.json `test` task has `"cache": false` — tests should always run fresh
 - CI pipeline: checkout → setup-bun → bun install --frozen-lockfile → lint → typecheck → test → build
 - bun-types devDep needed in each package for Bun API types (bun:test, etc.)
+
+## [2026-03-12] Task 6: KYA Identity Service (SPIFFE + OAuth mTLS trigger)
+- Implemented `@aoa/kya` MVP identity stack using short-lived JWT SVIDs (HS256) with claims: `sub`, `spiffe_id`, `owner_id`, `iat`, `exp`.
+- SPIFFE ID canonical format fixed as `spiffe://aoa.local/agent/{agentId}` and validated during verify.
+- Added in-memory store for agent-owner attribution (`Map<agentId, { ownerId, attributedAt }>`), revocation set, and lifecycle state map.
+- KYA lifecycle state machine implemented with strict transitions: `PENDING -> VERIFIED/EXPIRED/REVOKED`, `VERIFIED -> EXPIRED/REVOKED`, `EXPIRED -> REVOKED`, `REVOKED -> blocked`.
+- Revocation is permanent at identity layer: revoked agents cannot receive new SVID and existing SVID verification fails.
+- Step-up policy in KYA now triggers on amount `> 10_000_00` (SGD cents), first-time counterparty, or explicit high-risk actions; enforcement remains upstream.
+
+## [2026-03-12] Task 4: Type Definitions + OpenAPI Schema
+- Created 8 type definition files in packages/shared-types/src/types/:
+  - agent.ts: Agent, AgentStatus (ACTIVE/INACTIVE/SUSPENDED/REVOKED), KYAStatus (PENDING/VERIFIED/REJECTED/EXPIRED)
+  - account.ts: Account, AccountType (OPERATING/SETTLEMENT/ESCROW/RESERVE), AccountStatus (ACTIVE/FROZEN/CLOSED/SUSPENDED)
+  - capability.ts: Capability with 7 bounds (action[], amount_limit_sgd_cents, counterparty_scope[], ttl_seconds, max_frequency_per_hour, revocable, non_transferable=true)
+  - policy.ts: Policy, PolicyRule, PolicyVersion (versioned policy system)
+  - transaction.ts: Transaction with 7 states (INITIATED, AUTHORIZED, HELD, RELEASING, SETTLED, REFUNDED, DISPUTED)
+  - decision-record.ts: DecisionRecord with launch-critical fields (input_snapshot, policy_version, model_version, reason_codes[], override_actor?, trace_id, created_at, outcome)
+  - dispute.ts: DisputeCase, DisputeStatus (OPEN/UNDER_REVIEW/RESOLVED/CLOSED/ESCALATED)
+  - travel-rule.ts: IVMS101Payload, Pain001Message, Pacs008Message, Pacs002Message (minimal ISO 20022 stubs for Phase 1)
+- All types have matching Zod schemas with proper validation
+- All amounts in SGD cents (integer) to avoid floating point precision issues
+- OpenAPI 3.1 spec (openapi.yaml) covers 6 endpoint groups: agents, accounts, capabilities, payments, decisions, disputes
+- Build: `bun run build --filter=@aoa/shared-types` passes (127.36 KB bundled)
+- OpenAPI validation: `npx @redocly/cli lint openapi.yaml` passes (1 warning about localhost is acceptable)
+- TypeScript isolatedModules requires `export type` for type-only re-exports in index.ts
+- Zod schema pattern: export both schema (z.ZodType) and inferred type (z.infer<typeof Schema>)
