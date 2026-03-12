@@ -1,0 +1,32 @@
+MAS FinTech Regulatory Sandbox Evidence Package (Task 27)
+
+1. MAS Sandbox Application Draft: docs/regulatory/mas-sandbox-application.md
+   - Covers Executive Summary, Problem Statement, Solution, Architecture, Risk Management, AML/CFT, Data Protection, Exit Strategy.
+
+2. Regulatory Control Matrix: docs/regulatory/control-matrix.md
+   - Maps 26 regulatory controls to implementation status and code evidence.
+   - Statuses: IMPLEMENTED (23), PARTIAL (1), PLANNED (2).
+
+3. Evidence Index: docs/regulatory/evidence-index.md
+   - Organized index of 15 evidence items across AML, KYA, Audit Trail, and Governance.
+
+4. AML Evidence Items:
+   - Structuring detection: packages/compliance/src/aml.ts
+   - Account takeover detection: packages/compliance/src/aml.ts
+   - Manual review queue: packages/compliance/src/aml.ts
+
+5. KYA Evidence Items:
+   - SPIFFE ID issuance: packages/kya/src/identity.ts
+   - Lifecycle state machine: packages/kya/src/lifecycle.ts
+   - Step-up auth: packages/kya/src/step-up.ts
+
+6. Audit Trail Evidence Items:
+   - Decision records: packages/compliance/src/decision-record.ts
+   - Immutable storage: packages/compliance/src/decision-record.ts
+   - 7-year retention: packages/compliance/src/decision-record.ts
+
+Verification:
+- All required files created in docs/regulatory/
+- Control matrix covers all implemented packages (kya, policy, risk, compliance, ledger, settlement)
+- Evidence index references actual code paths
+- MAS application draft follows MAS guidelines

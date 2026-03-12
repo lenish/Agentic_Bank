@@ -256,3 +256,11 @@
 - PDPA checklist: 13 items covering Singapore's Personal Data Protection Act requirements
 - DataRetentionConfig as `as const` object — immutable at TypeScript level
 - Compliance package now at 78 tests (55 existing + 23 new privacy tests)
+
+## [2026-03-12] Task 27 — MAS Sandbox Evidence Package
+- Completed the MAS FinTech Regulatory Sandbox application draft, control matrix, and evidence index.
+- Mapped 26 regulatory controls across KYA, Policy, Risk, Compliance, Ledger, and Settlement packages.
+- Evidence package demonstrates "Compliance-as-Code" approach, linking MAS requirements directly to implementation files.
+- MAS application draft covers all 8 required sections including a clear exit strategy (SPI license path or orderly wind-down).
+- Control matrix identifies 23 IMPLEMENTED controls, 1 PARTIAL (human-in-the-loop UI), and 2 PLANNED (reporting/wind-down execution).
+- Evidence index provides a structured map for MAS auditors to verify AML, KYA, and Audit Trail integrity.
