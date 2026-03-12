@@ -1,0 +1,17 @@
+30
+--- entity-structure.md keyword count ---
+      30
+
+--- mas-sandbox-requirements.md keyword count ---
+56
+
+--- legal-partners-shortlist.md keyword count ---
+34
+
+--- Combined totals ---
+entity-structure.md:
+      30
+mas-sandbox-requirements.md:
+      56
+legal-partners-shortlist.md:
+      34

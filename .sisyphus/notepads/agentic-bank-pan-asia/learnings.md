@@ -75,3 +75,17 @@
 - MAS retention comment added: "7 years per MAS financial record requirements".
 - TODO for production: PostgreSQL with INSERT-only row-level security.
 - TypeScript strict mode: `as unknown as Record<string, unknown>` double-cast needed for runtime method-existence checks on class instances.
+
+## [2026-03-12] Task 2: Entity Incorporation + MAS Sandbox Preparation
+- PSA license decision: **SPI (Standard Payment Institution)** for Phase 1 — monthly volume well below S$3M, daily float well below S$5M, S$100K base capital vs S$250K MPI. Upgrade to MPI when volumes approach ~S$2M/month.
+- PSA 2019 relevant service categories for Phase 1: domestic money transfer service + account issuance service. E-money issuance may apply (evaluate if AOA balances = e-money).
+- ACRA incorporation: 3-6 weeks total. Name reservation (1-2 days), document prep (1-2 weeks), filing (same-day), post-incorporation (2-4 weeks).
+- Must have ≥1 Singapore-resident director (citizen, PR, or EP holder). Company secretary within 6 months.
+- Entity structure: AoaBank Pte. Ltd. — SCV ~90% equity, Execution Team ~10% ESOP. Separate balance sheet, own MAS license, independent board. Zodia archetype.
+- MAS sandbox timeline: ~24-28 months end-to-end (entity incorporation → sandbox application → 12-month sandbox → SPI license).
+- MAS pre-application consultation strongly recommended — shortens review cycle per precedent.
+- Legal partners shortlisted: Allen & Gledhill (gold standard MAS), Rajah & Tann (pan-Asian network for Phase 2+), WongPartnership (bank-spinout structuring), Simmons & Simmons (multi-jurisdiction).
+- Accounting: KPMG (MAS advisory strength), PwC (transfer pricing for SCV intercompany), Deloitte (comprehensive offering).
+- Year 1 professional fees estimate: S$128K-S$251K (~US$96K-US$188K).
+- MAS sandbox restrictions to expect: customer cap (50-200), transaction limits, geographic restriction (SG only), monthly reporting, fund safeguarding required even in sandbox.
+- AOA-specific MAS conditions anticipated: agent authorization audit trail, capability delegation bounds, human override mechanism, KYA requirements, explainability.
