@@ -1,0 +1,101 @@
+F1 Audit Evidence
+Timestamp: 2026-03-12T11:00:47Z
+Repo: /Users/ryan/Projects/Agentic_Bank
+
+## Step 1: Must Have
+
+[1] CapabilityToken|capability_token
+packages/api-gateway/dist/middleware/capability.d.ts
+packages/api-gateway/src/middleware/capability.ts
+packages/kya/dist/capability.d.ts
+packages/kya/dist/index.d.ts
+packages/kya/src/capability.test.ts
+packages/kya/src/capability.ts
+packages/kya/src/index.ts
+
+[2] DecisionRecord|decision_record
+packages/shared-types/dist/types/decision-record.d.ts
+packages/shared-types/dist/index.d.ts
+packages/shared-types/src/types/decision-record.ts
+packages/shared-types/src/index.ts
+packages/compliance/dist/privacy.d.ts
+packages/compliance/dist/decision-record.d.ts
+packages/compliance/dist/store.d.ts
+packages/compliance/dist/schema.d.ts
+packages/compliance/dist/index.d.ts
+packages/compliance/src/schema.ts
+packages/compliance/src/privacy.ts
+packages/compliance/src/index.test.ts
+packages/compliance/src/decision-record.ts
+packages/compliance/src/privacy.test.ts
+packages/compliance/src/index.ts
+packages/compliance/src/store.ts
+
+[3] deny_by_default|NO_MATCHING_POLICY|DENY (policy)
+packages/policy/dist/schema.d.ts
+packages/policy/src/schema.ts
+packages/policy/src/index.test.ts
+packages/policy/src/engine.ts
+
+[4] debit|credit|double.entry|LedgerEntry (ledger)
+packages/ledger/dist/wallet.d.ts
+packages/ledger/dist/schema.d.ts
+packages/ledger/dist/ledger.d.ts
+packages/ledger/src/schema.ts
+packages/ledger/src/index.test.ts
+packages/ledger/src/ledger.ts
+
+[5] SigningService|Ed25519|generateKeyPair (settlement)
+packages/settlement/dist/signing.d.ts
+packages/settlement/src/signing.test.ts
+packages/settlement/src/signing.ts
+
+[6] IdempotencyStore|idempotency_key|idempotencyKey
+packages/settlement/dist/idempotency.d.ts
+packages/settlement/src/idempotency.test.ts
+packages/settlement/src/idempotency.ts
+packages/api-gateway/dist/pipeline.d.ts
+packages/api-gateway/src/pipeline.test.ts
+packages/api-gateway/src/pipeline.ts
+packages/api-gateway/src/load-test.ts
+packages/api-gateway/src/gateway.ts
+
+[7] AmlEngine|TravelRuleService|IVMS101 (compliance)
+packages/compliance/dist/aml.d.ts
+packages/compliance/dist/index.d.ts
+packages/compliance/dist/travel-rule.d.ts
+packages/compliance/src/travel-rule.test.ts
+packages/compliance/src/travel-rule.ts
+packages/compliance/src/aml.ts
+packages/compliance/src/aml.test.ts
+packages/compliance/src/index.ts
+
+## Step 2: Must NOT Have
+
+[1] SpiceDB|spicedb
+
+[2] GraphRisk|graph.*risk
+
+[3] MPC|multi.party.computation
+
+[4] EUR|USD|JPY|multi.currency|multiCurrency (excluding test/docs)
+
+[5] auto.deploy|AUTO_DEPLOY|autoModel
+
+[6] unlimited.*autonomy|UNLIMITED_AUTO
+
+## Step 3: Evidence Files Completeness
+      37
+
+## Step 4: Human-gate artifacts
+docs/regulatory/
+control-matrix.md
+entity-structure.md
+evidence-index.md
+legal-partners-shortlist.md
+mas-sandbox-application.md
+mas-sandbox-requirements.md
+
+docs/security/
+owasp-checklist.md
+security-audit-report.md

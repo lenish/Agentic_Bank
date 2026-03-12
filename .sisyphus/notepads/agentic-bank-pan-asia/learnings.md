@@ -305,3 +305,13 @@
 - Landing server uses same Hono pattern as pipeline-server.ts and kpi-server.ts.
 - GTM docs created: one-pager (exec summary), datasheet (technical specs), api-quickstart (developer guide).
 - Dashboard tests: 39 total (7 new landing + 32 existing). Build: 43 modules, 0.80 MB.
+
+## [2026-03-12] Task 29 — Pilot Customer Onboarding Simulation
+- PilotOnboardingService follows existing api-gateway class pattern: Map-based in-memory stores, typed result objects, no `any`.
+- 3 pilot customers defined as `ReadonlyArray<PilotCustomer>` constant (`PILOT_CUSTOMERS`), each with `tier: "FREE"` and `region: "SG"`.
+- Per customer: 1 master account (`master-{customerId}`) + 2 agent sub-accounts (`agent-{customerId}-001` for payment-processing, `-002` for reconciliation).
+- Auto-completion logic: status transitions PENDING → ACTIVE (on onboard) → COMPLETED (when txn count > 0 AND feedback collected).
+- Idempotent onboarding: duplicate `onboardCustomer(id)` returns same result object (reference equality).
+- NPS validation: integer 0-10 only; `generatePilotReport()` computes average NPS with null when no feedback exists.
+- 16 new tests (exceeds 8 minimum): api-gateway now at 53 tests total. Build: 77.20 KB (34 modules).
+- Docs: onboarding-guide.md covers 6-step lifecycle (account → KYA → capability → payment → verification → feedback); feedback template has NPS + 3 CSAT + open comments.
