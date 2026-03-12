@@ -89,3 +89,10 @@
 - Year 1 professional fees estimate: S$128K-S$251K (~US$96K-US$188K).
 - MAS sandbox restrictions to expect: customer cap (50-200), transaction limits, geographic restriction (SG only), monthly reporting, fund safeguarding required even in sandbox.
 - AOA-specific MAS conditions anticipated: agent authorization audit trail, capability delegation bounds, human override mechanism, KYA requirements, explainability.
+
+## [2026-03-12] Task 7: Capability token mint/revoke/verify
+- Added `CapabilityTokenService` in `packages/kya/src/capability.ts` using Map-based in-memory stores for capability objects, cumulative amount usage, and rolling one-hour frequency timestamps.
+- Enforced all hard bounds at issuance/verification: `action_set`, `amount_limit_sgd_cents`, `counterparty_scope`, `ttl_seconds`, `max_frequency_per_hour`, `non_transferable=true`, and `revocable`.
+- Capability tokens are plain objects (no JWT); IDs are generated via `crypto.randomUUID()` and revocation is immediate with `CAPABILITY_REVOKED` on subsequent verify calls.
+- Expiry enforcement follows `issued_at + ttl_seconds * 1000 < Date.now()` and emits append-only audit events (`ISSUED`, `USED`, `REVOKED`, `EXPIRED`).
+- Added 10 `bun:test` cases in `packages/kya/src/capability.test.ts` including QA scenarios for amount-limit overflow and 1-second TTL expiry behavior.

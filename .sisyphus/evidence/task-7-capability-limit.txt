@@ -1,0 +1,32 @@
+Task 7 Evidence - Capability token mint/revoke/verify
+
+Implemented files:
+- packages/kya/src/capability.ts (new)
+- packages/kya/src/capability.test.ts (new)
+- packages/kya/src/index.ts (updated exports)
+
+Hard bounds enforced:
+1) action_set validation + verification allow-list enforcement
+2) amount_limit_sgd_cents integer/positive + cumulative usage ceiling enforcement
+3) counterparty_scope validation + strict counterparty allow-list enforcement
+4) ttl_seconds integer/positive + runtime expiry check on every verify call
+5) max_frequency_per_hour integer/positive + rolling one-hour frequency enforcement
+6) non_transferable forced true; issuance rejects false input
+7) revocable respected; non-revocable capability cannot be revoked
+
+Capability lifecycle behavior:
+- Issuance: plain object token, in-memory storage, audit event ISSUED
+- Verification/use: bound checks + cumulative/frequency tracking + audit event USED
+- Revocation: immediate invalidation + audit event REVOKED
+- Expiry: runtime transition to EXPIRED + audit event EXPIRED on first expiry detection
+
+Audit log format:
+- Append-only array entries:
+  { capability_id, event: 'ISSUED'|'USED'|'REVOKED'|'EXPIRED', timestamp, actor?, metadata? }
+
+Validation/tests/build:
+- LSP diagnostics: unavailable in environment (typescript-language-server not installed)
+- Command: export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/kya
+  Result: PASS (16 tests total; existing 6 + new 10)
+- Command: export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/kya
+  Result: PASS (exit 0)
