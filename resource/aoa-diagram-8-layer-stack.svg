@@ -1,0 +1,91 @@
+<svg width="1000" height="760" viewBox="0 0 1000 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 34px Inter, -apple-system, sans-serif; fill: #0F172A; }
+      .subtitle { font: 500 16px Inter, -apple-system, sans-serif; fill: #64748B; }
+      .layer-number { font: 700 18px Inter, -apple-system, sans-serif; fill: #F8FAFC; }
+      .layer-name { font: 700 22px Inter, -apple-system, sans-serif; fill: #FFFFFF; }
+      .layer-desc { font: 500 16px Inter, -apple-system, sans-serif; fill: #D8E4EF; }
+      .flow-label { font: 600 15px Inter, -apple-system, sans-serif; fill: #1E293B; }
+    </style>
+    <linearGradient id="bg-grad" x1="0" y1="0" x2="0" y2="760" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </linearGradient>
+    <marker id="arrow-navy" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+      <path d="M1 1L10 6L1 11" stroke="#1E293B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <filter id="soft-shadow" x="0" y="0" width="1000" height="760" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-opacity="0.08" flood-color="#0F172A"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="760" fill="url(#bg-grad)"/>
+
+  <text x="80" y="78" class="title">8-Layer Agentic Banking Stack</text>
+  <text x="80" y="106" class="subtitle">Data flow progresses upward from request intake to compliance-grade reporting.</text>
+
+  <line x1="500" y1="672" x2="500" y2="178" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <text x="308" y="702" class="flow-label">API / Messenger Request</text>
+  <path d="M912 176H958" stroke="#1E293B" stroke-width="2.5" stroke-linecap="round" marker-end="url(#arrow-navy)"/>
+  <text x="636" y="166" class="flow-label">Regulatory Audit Trail → MAS</text>
+
+  <g filter="url(#soft-shadow)">
+    <rect x="80" y="600" width="840" height="56" rx="14" fill="#0F172A"/>
+    <rect x="80" y="532" width="840" height="56" rx="14" fill="#1C2F49"/>
+    <rect x="80" y="464" width="840" height="56" rx="14" fill="#264462"/>
+    <rect x="80" y="396" width="840" height="56" rx="14" fill="#0E7490"/>
+    <rect x="80" y="328" width="840" height="56" rx="14" fill="#2AA6A1"/>
+    <rect x="80" y="260" width="840" height="56" rx="14" fill="#299A9A"/>
+    <rect x="80" y="192" width="840" height="56" rx="14" fill="#1D3B56"/>
+    <rect x="80" y="124" width="840" height="56" rx="14" fill="#0F172A"/>
+  </g>
+
+  <!-- Layer 1 -->
+  <circle cx="114" cy="628" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="634" class="layer-number">1</text>
+  <text x="150" y="634" class="layer-name">KYA Identity</text>
+  <text x="640" y="634" class="layer-desc">SPIFFE ID + mTLS</text>
+
+  <!-- Layer 2 -->
+  <circle cx="114" cy="560" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="566" class="layer-number">2</text>
+  <text x="150" y="566" class="layer-name">Capability Delegation</text>
+  <text x="535" y="566" class="layer-desc">Bounded tokens: action, amount, TTL</text>
+
+  <!-- Layer 3 -->
+  <circle cx="114" cy="492" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="498" class="layer-number">3</text>
+  <text x="150" y="498" class="layer-name">Policy Engine</text>
+  <text x="585" y="498" class="layer-desc">OPA/Cedar deny-by-default</text>
+
+  <!-- Layer 4 -->
+  <circle cx="114" cy="424" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="430" class="layer-number">4</text>
+  <text x="150" y="430" class="layer-name">Risk Scoring</text>
+  <text x="565" y="430" class="layer-desc">15 pre-trade rules, &lt;100ms p95</text>
+
+  <!-- Layer 5 -->
+  <circle cx="114" cy="356" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="362" class="layer-number">5</text>
+  <text x="150" y="362" class="layer-name">Blockchain Infra</text>
+  <text x="528" y="362" class="layer-desc">Multi-chain adapter + KMS signing</text>
+
+  <!-- Layer 6 -->
+  <circle cx="114" cy="288" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="294" class="layer-number">6</text>
+  <text x="150" y="294" class="layer-name">Stablecoin Settlement</text>
+  <text x="558" y="294" class="layer-desc">USDC/USDT + SGD dual rail</text>
+
+  <!-- Layer 7 -->
+  <circle cx="114" cy="220" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="226" class="layer-number">7</text>
+  <text x="150" y="226" class="layer-name">Dispute/Recon</text>
+  <text x="560" y="226" class="layer-desc">Auto-accept &lt;$50, SLA tracking</text>
+
+  <!-- Layer 8 -->
+  <circle cx="114" cy="152" r="16" fill="#FFFFFF" fill-opacity="0.16"/>
+  <text x="108" y="158" class="layer-number">8</text>
+  <text x="150" y="158" class="layer-name">Compliance</text>
+  <text x="520" y="158" class="layer-desc">Osprey AML + IVMS101 Travel Rule</text>
+</svg>

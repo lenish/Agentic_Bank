@@ -1,0 +1,87 @@
+<svg width="1000" height="680" viewBox="0 0 1000 680" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font: 700 34px Inter, -apple-system, sans-serif; fill: #0F172A; }
+      .zone-title { font: 700 22px Inter, -apple-system, sans-serif; }
+      .node-title { font: 700 18px Inter, -apple-system, sans-serif; }
+      .node-text { font: 500 14px Inter, -apple-system, sans-serif; }
+      .label { font: 600 14px Inter, -apple-system, sans-serif; }
+      .small { font: 500 13px Inter, -apple-system, sans-serif; }
+    </style>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="680" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#F8FAFC"/>
+    </linearGradient>
+    <marker id="arrow-teal" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+      <path d="M1 1L10 6L1 11" stroke="#2DD4BF" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrow-slate" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+      <path d="M1 1L10 6L1 11" stroke="#1E293B" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <filter id="shadow" x="0" y="0" width="1000" height="680" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-opacity="0.08" flood-color="#0F172A"/>
+    </filter>
+  </defs>
+
+  <rect width="1000" height="680" fill="url(#bg)"/>
+  <text x="70" y="74" class="title">Isolated Signing Architecture</text>
+
+  <!-- Zones -->
+  <g filter="url(#shadow)">
+    <rect x="60" y="110" width="430" height="520" rx="20" fill="#EAF0F7" stroke="#CBD5E1"/>
+    <rect x="510" y="110" width="430" height="520" rx="20" fill="#0F172A" stroke="#1E293B"/>
+  </g>
+
+  <text x="88" y="152" class="zone-title" fill="#1E293B">Agent Runtime (Untrusted Zone)</text>
+  <text x="540" y="152" class="zone-title" fill="#F8FAFC">Signing Core (Isolated Zone)</text>
+
+  <!-- Security boundary -->
+  <line x1="500" y1="100" x2="500" y2="640" stroke="#64748B" stroke-width="3" stroke-dasharray="10 8"/>
+  <rect x="430" y="84" width="140" height="28" rx="14" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <text x="445" y="103" class="label" fill="#475569">Security Boundary</text>
+
+  <!-- Left zone nodes -->
+  <rect x="92" y="202" width="366" height="96" rx="16" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <text x="118" y="238" class="node-title" fill="#0F172A">Autonomous AI Agent</text>
+  <text x="118" y="262" class="node-text" fill="#64748B">Decisioning, planning, and transaction intent generation</text>
+
+  <rect x="92" y="334" width="366" height="100" rx="16" fill="#FFFFFF" stroke="#CBD5E1"/>
+  <text x="118" y="370" class="node-title" fill="#0F172A">API Endpoints</text>
+  <text x="118" y="394" class="node-text" fill="#64748B">Ingress adapters for chat and service commands</text>
+
+  <rect x="118" y="450" width="106" height="34" rx="17" fill="#F8FAFC" stroke="#94A3B8"/>
+  <text x="146" y="472" class="label" fill="#334155">Telegram</text>
+  <rect x="236" y="450" width="90" height="34" rx="17" fill="#F8FAFC" stroke="#94A3B8"/>
+  <text x="265" y="472" class="label" fill="#334155">Slack</text>
+  <line x1="171" y1="450" x2="171" y2="434" stroke="#94A3B8" stroke-width="2"/>
+  <line x1="281" y1="450" x2="281" y2="434" stroke="#94A3B8" stroke-width="2"/>
+
+  <rect x="92" y="526" width="366" height="70" rx="14" fill="#FFF7ED" stroke="#FDBA74"/>
+  <text x="118" y="553" class="label" fill="#9A3412">Agent must NOT hold raw keys</text>
+  <text x="118" y="574" class="small" fill="#C2410C">Only canonical hashes are passed to the isolated signer</text>
+
+  <!-- Right zone secure vault -->
+  <rect x="548" y="194" width="354" height="374" rx="18" fill="#111D33" stroke="#2DD4BF" stroke-opacity="0.45"/>
+  <text x="682" y="232" class="label" fill="#99F6E4">Isolated signing process</text>
+
+  <!-- Lock icon -->
+  <rect x="706" y="252" width="38" height="32" rx="7" fill="#0E7490"/>
+  <path d="M715 252V246C715 238 721 232 729 232C737 232 743 238 743 246V252" stroke="#99F6E4" stroke-width="3" stroke-linecap="round"/>
+
+  <rect x="584" y="302" width="282" height="88" rx="14" fill="#0F172A" stroke="#334155"/>
+  <text x="612" y="339" class="node-title" fill="#F8FAFC">HSM / KMS</text>
+  <text x="612" y="362" class="node-text" fill="#94A3B8">Hardware-backed signing and policy-gated access</text>
+
+  <rect x="584" y="410" width="282" height="72" rx="14" fill="#0F172A" stroke="#334155"/>
+  <text x="612" y="452" class="node-title" fill="#F8FAFC">Signing Key (KMS-held)</text>
+
+  <rect x="584" y="496" width="282" height="48" rx="12" fill="#083344" stroke="#0E7490"/>
+  <text x="642" y="526" class="label" fill="#CCFBF1">2-of-3 multisig required</text>
+
+  <!-- Flow arrows -->
+  <line x1="458" y1="274" x2="542" y2="274" stroke="#2DD4BF" stroke-width="3" marker-end="url(#arrow-teal)"/>
+  <text x="322" y="266" class="label" fill="#0E7490">Tx Request (canonical hash)</text>
+
+  <line x1="542" y1="340" x2="458" y2="340" stroke="#E2E8F0" stroke-width="3" marker-end="url(#arrow-slate)"/>
+  <text x="386" y="332" class="label" fill="#334155">Tx Signature</text>
+</svg>
