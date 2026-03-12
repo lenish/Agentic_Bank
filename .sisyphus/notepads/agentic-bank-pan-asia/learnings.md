@@ -133,3 +133,11 @@
 - Decision precedence is deterministic: any `BLOCK` rule wins, else any `HOLD`, else score threshold (`> 70`) triggers `HOLD`, else `ALLOW`.
 - Input model remains SGD-cent integer first; rapid-succession supports optional `transaction_count_last_5_minutes` and falls back to hourly count when unavailable.
 - `bun:test` coverage includes direct rule-level assertions and engine-level behavior (score cap, threshold hold, kill-switch, and metadata timing checks).
+
+## [2026-03-12] Task 13 — Idempotency + Outbox + Saga Orchestration
+- `IdempotencyStore` uses in-memory `Map<string, IdempotencyRecord>` with write-once key semantics (`set` throws on duplicate key), plus `has/get/reap` APIs for replay and stale-key cleanup.
+- `reap(maxAgeMs)` removes entries older than cutoff regardless of status, which covers stuck `PENDING` keys and supports the 60s timeout recovery scenario.
+- `OutboxService` is append-only in memory: `publish` appends immutable event snapshots; `drain` marks only unprocessed events and sets `processed_at` without deleting history.
+- `SagaOrchestrator` executes sequential steps and compensates in strict reverse order on failure; returns `COMPENSATED` when rollback succeeds, `FAILED` when compensation has errors.
+- Saga lifecycle emits outbox events for execute, complete, fail, compensate execute/complete/fail transitions, enabling downstream async processing/audit.
+- Added `bun:test` coverage in `idempotency.test.ts` (14 tests) for idempotent replay, webhook dedup, stale key reaping, outbox drain semantics, and saga compensation/failure paths.

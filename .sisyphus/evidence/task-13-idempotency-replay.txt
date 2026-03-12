@@ -1,0 +1,34 @@
+Task: T13 - Idempotency + Outbox + Saga Orchestrator
+Date: 2026-03-12
+
+Implemented files:
+- packages/settlement/src/idempotency.ts
+- packages/settlement/src/outbox.ts
+- packages/settlement/src/saga.ts
+- packages/settlement/src/idempotency.test.ts
+- packages/settlement/src/index.ts (exports updated)
+
+Acceptance evidence:
+- Idempotent replay: `IdempotencyStore` caches record by key; duplicate key insert throws.
+- Reaper behavior: `reap(maxAgeMs)` removes stale entries, including stuck PENDING keys.
+- Outbox append-only: events are appended and only marked processed during drain.
+- Saga compensation: failed mid-step triggers reverse compensation for completed steps.
+- Saga outbox logging: execute/fail/compensate lifecycle emits outbox events.
+
+Validation commands:
+1) export PATH="$HOME/.bun/bin:$PATH" && bun run test --filter=@aoa/settlement
+   - Result: PASS
+   - 25 pass, 0 fail
+   - Includes 14 new tests in src/idempotency.test.ts
+
+2) export PATH="$HOME/.bun/bin:$PATH" && bun run build --filter=@aoa/settlement
+   - Result: PASS
+   - build exit code 0
+
+3) export PATH="$HOME/.bun/bin:$PATH" && bun run lint --filter=@aoa/settlement
+   - Result: PASS
+   - tsc --noEmit clean
+
+Notes:
+- LSP diagnostics tool unavailable in this environment (`typescript-language-server` not installed).
+- Type correctness verified via package lint/typecheck and build.
