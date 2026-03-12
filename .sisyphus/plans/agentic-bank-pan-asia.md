@@ -1,11 +1,11 @@
-# Agentic Bank — Pan-Asia Venture Plan (SC Ventures × Execution Team)
+# Agentic Bank — Pan-Asia Venture Plan (SC Ventures × Hashed × Execution Team)
 
 ## TL;DR
 
-> **Quick Summary**: Build trusted financial execution infrastructure for the age of autonomous economic agents, in partnership with SC Ventures. Singapore (MAS sandbox) first, then Pan-Asia expansion. Core product: **Agent Operating Account (AOA)** — B2B infra enabling enterprises to create per-agent sub-accounts with policy-bound spending, settlement, and audit via API + messenger.
+> **Quick Summary**: Build trusted financial execution infrastructure for the age of autonomous economic agents, in partnership with SC Ventures and Hashed. Singapore (MAS sandbox) first, then Pan-Asia expansion. Core product: **Agent Operating Account (AOA)** — B2B infra enabling enterprises to create per-agent sub-accounts with policy-bound spending, settlement, and audit via API + messenger.
 >
 > **Deliverables**:
-> - 7-Layer Agentic Banking Stack (KYA → Wallet → Policy → Risk → Settlement → Dispute → Compliance)
+> - 8-Layer Agentic Banking Stack (KYA → Wallet → Policy → Risk → Blockchain Infra → Stablecoin Settlement → Dispute → Compliance)
 > - SC Ventures Joint Operating Model (Operating Charter)
 > - MAS Regulatory Sandbox Entry
 > - OMO-style Messenger-First UX (Telegram/Slack → Financial Commands)
@@ -20,13 +20,13 @@
 ## Context
 
 ### Original Request
-Build Agentic Banking Infrastructure as a joint venture with SC Ventures. Starting from the core question: "If all agents can perform economic activity, what role should banks play?" Pan-Asia scope, Singapore first.
+Build Agentic Banking Infrastructure as a joint venture with SC Ventures and Hashed. Starting from the core question: "If all agents can perform economic activity, what role should banks play?" Pan-Asia scope, Singapore first.
 
 ### Interview Summary
 **Key Discussions**:
 - Redefining the bank's role: from custody/transfer → integrated trust OS for delegation-policy-risk-settlement-liability
-- 7 infrastructure layers defined + Oracle reviewed twice
-- SC Ventures work split: SCV = origination/regulatory/distribution, Us = product/eng/ops
+- 8 infrastructure layers defined (7 original + Blockchain Infra + Stablecoin Settlement added later) + Oracle reviewed twice
+- SC Ventures × Hashed work split: SCV = origination/regulatory/distribution, Hashed = blockchain infra/crypto ecosystem/Web3 network, Us = product/eng/ops
 - OMO.bot patterns applied: messenger-first, pipeline visualization, growth maturity model, token-based pricing
 
 **Research Findings**:
@@ -49,11 +49,11 @@ Build Agentic Banking Infrastructure as a joint venture with SC Ventures. Starti
 ## Work Objectives
 
 ### Core Objective
-Build bank-grade infrastructure for safe execution, settlement, and auditing of autonomous agent economic activity, and acquire first commercial customers in Singapore via SC Ventures network.
+Build bank-grade infrastructure for safe execution, settlement, and auditing of autonomous agent economic activity, and acquire first commercial customers in Singapore via SC Ventures and Hashed networks.
 
 ### Concrete Deliverables
 1. **Entity incorporation** + MAS Regulatory Sandbox application
-2. **7-Layer tech stack** MVP (single rail: SGD domestic transfer, small-amount limits)
+2. **8-Layer tech stack** MVP (SGD domestic transfer + stablecoin rails, small-amount limits)
 3. **Agent Operating Account (AOA)** API + Telegram/Slack interfaces
 4. **Operating Charter** (SC Ventures joint governance document)
 5. **3+ pilot customers** (SC network enterprises)
@@ -80,7 +80,7 @@ Build bank-grade infrastructure for safe execution, settlement, and auditing of 
 - Unlimited autonomous execution forbidden (always bounded autonomy)
 - Automatic model deployment forbidden (canary/shadow + approval gate required)
 - Phase 2 items like SpiceDB/Graph risk must NOT be introduced early
-- Multi-rail/multi-asset forbidden in Phase 1 (SGD rail only)
+- Multi-rail/multi-asset limited in Phase 1 (SGD domestic + USDC/USDT stablecoin only; other fiat currencies and exotic tokens forbidden)
 - Direct exposure of bank's main balance sheet forbidden (separate entity structure)
 
 ---

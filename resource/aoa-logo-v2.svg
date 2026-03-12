@@ -1,0 +1,12 @@
+<svg width="1200" height="320" viewBox="0 0 1200 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">AOA logo v2</title>
+  <desc id="desc">Ultra-minimal logo for AOA with a geometric symbol and Agent Operating Account wordmark.</desc>
+  <rect width="1200" height="320" rx="32" fill="white"/>
+  <rect x="56" y="56" width="208" height="208" rx="52" fill="#0F172A"/>
+  <circle cx="160" cy="160" r="50" stroke="#F8FAFC" stroke-width="20"/>
+  <path d="M110 160L210 160" stroke="#F8FAFC" stroke-width="20" stroke-linecap="round"/>
+  <path d="M160 110L160 210" stroke="#F8FAFC" stroke-width="20" stroke-linecap="round"/>
+  <circle cx="160" cy="160" r="18" fill="#2DD4BF"/>
+  <text x="312" y="180" fill="#0F172A" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="96" font-weight="700" letter-spacing="-4">AOA</text>
+  <text x="312" y="230" fill="#475569" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="30" font-weight="500" letter-spacing="1.5">AGENT OPERATING ACCOUNT</text>
+</svg>

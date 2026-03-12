@@ -13,6 +13,12 @@
       "name": "@aoa/api-gateway",
       "version": "0.0.0",
       "dependencies": {
+        "@aoa/compliance": "workspace:*",
+        "@aoa/kya": "workspace:*",
+        "@aoa/ledger": "workspace:*",
+        "@aoa/policy": "workspace:*",
+        "@aoa/risk": "workspace:*",
+        "@aoa/settlement": "workspace:*",
         "hono": "4.12.7",
       },
       "devDependencies": {

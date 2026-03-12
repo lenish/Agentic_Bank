@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Bank Plan — Agent Operating Account (AOA)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f172a'/%3E%3Cpath d='M32 12 50 52h-8l-3.5-8H25.5L22 52h-8zm0 17-3.2 7h6.4z' fill='%23ecfeff'/%3E%3C/svg%3E">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--navy:#0f172a;--slate:#1e293b;--gray:#64748b;--light:#f8fafc;--border:#e2e8f0;--accent:#0e7490;--accent-light:#ecfeff;--accent-bg:#f0fdfa;--code-bg:#1e293b;--max-w:860px;--sidebar-w:260px}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',Roboto,sans-serif;color:var(--slate);line-height:1.7;background:#fff}
+
+/* NAV */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--navy);color:#fff;padding:0 2rem;height:56px;display:flex;align-items:center;gap:1.5rem}
+.topbar .logo{font-weight:700;font-size:1.1rem;letter-spacing:-.02em;white-space:nowrap;display:flex;align-items:center;gap:.5rem}
+.topbar .logo svg{flex-shrink:0}
+.topbar .sep{width:1px;height:24px;background:rgba(255,255,255,.2)}
+.topbar .tagline{font-size:.8rem;color:rgba(255,255,255,.55);display:none}
+@media(min-width:768px){.topbar .tagline{display:block}}
+
+/* SIDEBAR */
+.sidebar{position:fixed;top:56px;left:0;width:var(--sidebar-w);height:calc(100vh - 56px);overflow-y:auto;border-right:1px solid var(--border);padding:1.5rem 1rem;background:#fff;z-index:50}
+.sidebar a{display:block;padding:.35rem .6rem;margin-bottom:2px;font-size:.82rem;color:var(--gray);text-decoration:none;border-radius:6px;line-height:1.4;transition:background .15s,color .15s}
+.sidebar a:hover{background:var(--accent-light);color:var(--accent)}
+.sidebar .s-label{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--gray);margin:1rem 0 .4rem .6rem}
+@media(max-width:1024px){.sidebar{display:none}}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);padding:56px 0 0}
+@media(max-width:1024px){.main{margin-left:0}}
+.content{max-width:var(--max-w);margin:0 auto;padding:3rem 2rem 6rem}
+
+/* COVER */
+.cover{text-align:center;padding:5rem 2rem 4rem;border-bottom:1px solid var(--border)}
+.cover h1{font-size:2.8rem;font-weight:800;color:var(--navy);letter-spacing:-.03em;line-height:1.15;margin-bottom:.8rem}
+.cover .subtitle{font-size:1.15rem;color:var(--gray);max-width:640px;margin:0 auto 1.5rem}
+.cover .meta{font-size:.85rem;color:var(--gray)}
+.cover .meta span{margin:0 .5rem}
+.cover .tagline-block{margin-top:2rem;padding:1.2rem 2rem;background:var(--accent-bg);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;display:inline-block;text-align:left;font-style:italic;color:var(--accent);font-size:.95rem;max-width:600px}
+
+/* HEADINGS */
+h2{font-size:1.6rem;font-weight:700;color:var(--navy);margin:3.5rem 0 1rem;padding-bottom:.5rem;border-bottom:2px solid var(--border);letter-spacing:-.02em}
+h3{font-size:1.15rem;font-weight:600;color:var(--navy);margin:2rem 0 .6rem}
+h4{font-size:1rem;font-weight:600;color:var(--slate);margin:1.5rem 0 .5rem}
+p{margin-bottom:1rem}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse;margin:1.2rem 0 1.8rem;font-size:.88rem}
+thead{background:var(--navy);color:#fff}
+th{padding:.7rem 1rem;text-align:left;font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em}
+td{padding:.65rem 1rem;border-bottom:1px solid var(--border);vertical-align:top}
+tbody tr:hover{background:var(--accent-light)}
+
+/* TWO-COL TABLE */
+.two-col thead th:first-child{width:50%}
+
+/* LISTS */
+ul,ol{margin:0 0 1.2rem 1.5rem}
+li{margin-bottom:.35rem;font-size:.92rem}
+
+/* CODE */
+pre{background:var(--code-bg);color:#e2e8f0;padding:1.2rem 1.4rem;border-radius:8px;overflow-x:auto;margin:1rem 0 1.5rem;font-size:.82rem;line-height:1.6}
+code{font-family:'SF Mono','Fira Code','Consolas',monospace;font-size:.85em}
+p code,li code,td code{background:#f1f5f9;color:var(--accent);padding:.15em .4em;border-radius:4px;font-size:.83em}
+
+/* CALLOUT */
+.callout{padding:1rem 1.4rem;background:var(--accent-bg);border-left:4px solid var(--accent);border-radius:0 8px 8px 0;margin:1.5rem 0;font-size:.9rem}
+.callout strong{color:var(--accent)}
+
+/* BADGE */
+.badge{display:inline-block;padding:.15em .55em;border-radius:4px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.badge-green{background:#dcfce7;color:#166534}
+.badge-yellow{background:#fef9c3;color:#854d0e}
+.badge-blue{background:#dbeafe;color:#1e40af}
+
+/* ENTITY DIAGRAM */
+.entity-diagram{background:var(--light);border:1px solid var(--border);border-radius:12px;padding:2rem;margin:1.5rem 0;text-align:center}
+.entity-diagram .box{display:inline-block;border:2px solid var(--accent);border-radius:10px;padding:1rem 1.5rem;margin:.5rem;text-align:center;min-width:180px;background:#fff}
+.entity-diagram .box-main{border-width:3px;min-width:280px}
+.entity-diagram .arrow{font-size:1.5rem;color:var(--gray);margin:0 .5rem}
+.entity-diagram .label{font-size:.75rem;color:var(--gray);margin-top:.3rem}
+.entity-row{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1rem}
+
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;font-size:.8rem;color:var(--gray)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo"><svg width="32" height="32" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="320" rx="80" fill="#F8FAFC"/><rect x="56" y="56" width="208" height="208" rx="52" fill="#0F172A"/><circle cx="160" cy="160" r="50" stroke="#F8FAFC" stroke-width="20"/><path d="M110 160L210 160" stroke="#F8FAFC" stroke-width="20" stroke-linecap="round"/><path d="M160 110L160 210" stroke="#F8FAFC" stroke-width="20" stroke-linecap="round"/><circle cx="160" cy="160" r="18" fill="#2DD4BF"/></svg> AOA</div>
+  <div class="sep"></div>
+  <div class="tagline">Agent Operating Account (AOA) — SC Ventures x Hashed</div>
+</div>
+
+<nav class="sidebar">
+  <div class="s-label">Overview</div>
+  <a href="#cover">Cover</a>
+  <a href="#summary">Executive Summary</a>
+  <a href="#problem">Problem Statement</a>
+  <div class="s-label">Product</div>
+  <a href="#solution">8-Layer Stack</a>
+  <a href="#architecture">Technical Architecture</a>
+  <a href="#api">API Quickstart</a>
+  <div class="s-label">Business</div>
+  <a href="#partners">Why SCV x Hashed</a>
+  <a href="#entity">Entity Structure</a>
+  <a href="#regulatory">Regulatory Strategy</a>
+  <a href="#gtm">Execution &amp; GTM</a>
+  <div class="s-label">Close</div>
+  <a href="#ask">The Ask</a>
+  <a href="#why-now">Why Now</a>
+</nav>
+
+<div class="main">
+
+<!-- COVER -->
+<section class="cover" id="cover">
+  <div style="margin-bottom:1.5rem"><svg width="80" height="80" viewBox="0 0 320 320" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="320" height="320" rx="80" fill="#0F172A"/><circle cx="160" cy="160" r="50" stroke="#F8FAFC" stroke-width="20"/><path d="M110 160L210 160" stroke="#F8FAFC" stroke-width="20" stroke-linecap="round"/><path d="M160 110L160 210" stroke="#F8FAFC" stroke-width="20" stroke-linecap="round"/><circle cx="160" cy="160" r="18" fill="#2DD4BF"/></svg></div>
+  <h1>Agentic Bank Plan</h1>
+  <p class="subtitle">Agent Operating Account (AOA) — Pan-Asia Financial Infrastructure for Autonomous Agents</p>
+  <p class="meta">
+    <span>March 2026</span> |
+    <span>Pre-Seed / Joint Venture</span> |
+    <span>Partners: <strong>SC Ventures x Hashed</strong></span>
+  </p>
+  <div class="tagline-block">"We don't build a bank for agents. We build the operating system that lets agents use banks."</div>
+</section>
+
+<div class="content">
+
+<!-- 2. EXECUTIVE SUMMARY -->
+<h2 id="summary">1. Executive Summary</h2>
+<p>Every enterprise is deploying autonomous AI agents. These agents will need to spend money, settle invoices, manage budgets, and comply with regulations &mdash; but today, <strong>no bank offers an account designed for machines.</strong></p>
+<p>We build the <strong>Agent Operating Account (AOA)</strong>: bank-grade financial infrastructure purpose-built for autonomous agents. Not a neobank. Not a wallet. The <strong>trust layer</strong> between enterprise AI and the financial system.</p>
+<p>Jointly built by <strong>SC Ventures</strong> and <strong>Hashed</strong> to bridge traditional finance and blockchain infrastructure with the machine economy.</p>
+
+<!-- 3. PROBLEM -->
+<h2 id="problem">2. Problem Statement</h2>
+<table class="two-col">
+<thead><tr><th>Today</th><th>Tomorrow (2027+)</th></tr></thead>
+<tbody>
+<tr><td>Agents use shared corporate cards or human-proxied payments</td><td>Every enterprise runs 10&ndash;100+ agents with independent budgets</td></tr>
+<tr><td>No identity standard for machine actors</td><td>Regulators require KYA (Know Your Agent) &mdash; who delegated, what limits, full audit trail</td></tr>
+<tr><td>Manual expense reconciliation</td><td>Real-time policy enforcement, automated settlement, instant dispute resolution</td></tr>
+</tbody>
+</table>
+<div class="callout"><strong>The gap:</strong> Banks don't have products for non-human economic actors. First mover captures the infrastructure layer.</div>
+
+<!-- 4. SOLUTION -->
+<h2 id="solution">3. Solution: 8-Layer Agentic Banking Stack</h2>
+<table>
+<thead><tr><th>Layer</th><th>Function</th><th>Why It Matters</th></tr></thead>
+<tbody>
+<tr><td><strong>1. KYA Identity</strong></td><td>SPIFFE ID + mTLS &mdash; machine-native identity</td><td>Agent &ne; human. Different auth model.</td></tr>
+<tr><td><strong>2. Capability Delegation</strong></td><td>Bounded tokens: action, amount, TTL, counterparty</td><td>Owner controls what agent can do. Revocable.</td></tr>
+<tr><td><strong>3. Policy Engine</strong></td><td>OPA/Cedar deny-by-default</td><td>No spend without explicit policy. Shadow eval before deploy.</td></tr>
+<tr><td><strong>4. Risk Scoring</strong></td><td>15 pre-trade rules, &lt;100ms p95</td><td>Velocity, structuring, anomaly &mdash; real-time, kill-switchable.</td></tr>
+<tr><td><strong>5. Blockchain Infra</strong></td><td>Multi-chain adapter, KMS-based signing</td><td>Bridging agentic workloads to on-chain environments securely.</td></tr>
+<tr><td><strong>6. Stablecoin Settlement</strong></td><td>USDC/USDT + on-chain rail adapters</td><td>Instant, cross-border, 24/7 programmable settlement for machine economies.</td></tr>
+<tr><td><strong>7. Fiat Settlement</strong></td><td>State machine + SGD rail adapter</td><td>Escrow, idempotent saga, provider-agnostic.</td></tr>
+<tr><td><strong>8. Compliance</strong></td><td>Osprey AML + IVMS101 Travel Rule adapter</td><td>MAS-ready from day one.</td></tr>
+</tbody>
+</table>
+<p><strong>UX:</strong> Messenger-first (Telegram/Slack) with real-time 5-stage pipeline visualization. Enterprise operators see every decision an agent makes, in real time.</p>
+
+<!-- 5. ARCHITECTURE -->
+<h2 id="architecture">4. Technical Architecture</h2>
+
+<h3>4.1 Account of Agency (AOA)</h3>
+<p>Each AI agent receives a dedicated AOA with:</p>
+<ul>
+  <li><strong>SPIFFE/SVID identity</strong> &mdash; cryptographic agent identity bound to workload attestation</li>
+  <li><strong>Capability tokens</strong> &mdash; scoped permissions (e.g., <code>transfer:sgd:max_1000</code>) with TTL</li>
+  <li><strong>Risk profile</strong> &mdash; continuously updated risk score based on transaction history</li>
+  <li><strong>Audit trail</strong> &mdash; immutable log of every decision and transaction</li>
+</ul>
+
+<h3>4.2 Detailed Layer Descriptions</h3>
+
+<h4>Layer 1: KYA Identity (Know Your Agent)</h4>
+<ul>
+  <li>SPIFFE/SVID-based identity framework</li>
+  <li>Workload attestation via SPIRE</li>
+  <li>Agent identity lifecycle management (provisioning, rotation, revocation)</li>
+</ul>
+
+<h4>Layer 2: Capability Token Delegation</h4>
+<ul>
+  <li>JSON-based capability tokens with hierarchical scoping</li>
+  <li>Principal-to-agent delegation chains</li>
+  <li>Automatic token expiry and revocation</li>
+</ul>
+
+<h4>Layer 3: Deny-by-Default Policy Engine</h4>
+<ul>
+  <li>OPA (Open Policy Agent) integration</li>
+  <li>Policy-as-code with version control</li>
+  <li>Real-time policy evaluation &lt;5ms p99</li>
+</ul>
+
+<h4>Layer 4: Pre-Trade Risk Engine</h4>
+<p>15 built-in risk rules:</p>
+<ul>
+  <li>Single transaction limit / Daily, weekly, monthly volume caps</li>
+  <li>Counterparty concentration limits / Velocity checks</li>
+  <li>Cross-border transfer restrictions / Currency pair limits</li>
+  <li>Time-of-day restrictions / Agent maturity gating</li>
+  <li>Anomaly detection (deviation from historical pattern)</li>
+  <li>Sanctions screening / PEP check / Adverse media screening</li>
+  <li>Geographic risk scoring / Network analysis / Behavioral biometrics</li>
+</ul>
+
+<h4>Layer 5: Blockchain Infrastructure</h4>
+<ul>
+  <li>Enterprise-grade KMS signing services (HSM/KMS key separation)</li>
+  <li>Gas-abstracting paymasters for agent transactions</li>
+  <li>Unified RPC routing across EVM chains and Solana</li>
+  <li>Multi-chain adapter with provider abstraction layer</li>
+</ul>
+
+<h4>Layer 6: Stablecoin Settlement Rail</h4>
+<ul>
+  <li>Native on-chain settlement supporting USDC/USDT</li>
+  <li>Major EVM networks (Ethereum, Base, Arbitrum) and Solana</li>
+  <li>Smart-contract escrow capabilities (HTLC-style)</li>
+  <li>24/7 cross-border programmable settlement</li>
+</ul>
+
+<h4>Layer 7: Fiat Settlement Rail (SGD)</h4>
+<ul>
+  <li>Real-time SGD settlement via FAST (Fast And Secure Transfers)</li>
+  <li>Atomic commit with two-phase confirmation</li>
+  <li>Settlement finality guarantee</li>
+  <li>Multi-currency support roadmap (HKD, JPY, AUD)</li>
+</ul>
+
+<h4>Layer 8: Compliance &amp; Immutable Decision Records</h4>
+<ul>
+  <li>Real-time AML screening against sanctions lists</li>
+  <li>FATF Travel Rule compliance (IVMS101)</li>
+  <li>Append-only audit log with cryptographic chaining (hash-linked records)</li>
+  <li>Regulatory-grade retention (7+ years), export in ISO 20022 / XBRL</li>
+</ul>
+
+<h3>4.3 Agent Maturity Ladder</h3>
+<table>
+<thead><tr><th>Stage</th><th>Description</th><th>Autonomy</th></tr></thead>
+<tbody>
+<tr><td><span class="badge badge-blue">Rule-Only</span></td><td>All actions require pre-approval</td><td>None</td></tr>
+<tr><td><span class="badge badge-yellow">Assisted</span></td><td>AI recommendations with human approval</td><td>Low</td></tr>
+<tr><td><span class="badge badge-green">Bounded</span></td><td>Autonomous within defined limits</td><td>Medium</td></tr>
+<tr><td><strong>Portfolio</strong></td><td>Full portfolio management autonomy</td><td>High</td></tr>
+</tbody>
+</table>
+
+<h3>4.4 Performance Specifications</h3>
+<table>
+<thead><tr><th>Metric</th><th>Target</th></tr></thead>
+<tbody>
+<tr><td>Risk evaluation latency</td><td>&lt;50ms p99</td></tr>
+<tr><td>Policy evaluation latency</td><td>&lt;5ms p99</td></tr>
+<tr><td>Settlement confirmation (FAST)</td><td>&lt;3s</td></tr>
+<tr><td>Stablecoin settlement confirmation</td><td>&lt;15s (finality dependent)</td></tr>
+<tr><td>API availability</td><td>99.95% SLA</td></tr>
+<tr><td>Audit query response</td><td>&lt;100ms p95</td></tr>
+<tr><td>Agent onboarding</td><td>&lt;5 minutes</td></tr>
+</tbody>
+</table>
+
+<!-- 6. API QUICKSTART -->
+<h2 id="api">5. API Quickstart</h2>
+<p>Get your AI agent transacting in under 5 minutes.</p>
+
+<h3>Step 1: Create an Account of Agency (AOA)</h3>
+<pre><code>curl -X POST https://api.agentic.bank/v1/accounts \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "agent_spiffe_id": "spiffe://example.org/agent/trading-bot-1",
+    "display_name": "Trading Bot Alpha",
+    "initial_maturity": "RULE_ONLY"
+  }'</code></pre>
+
+<h3>Step 2: Issue a Capability Token</h3>
+<pre><code>curl -X POST https://api.agentic.bank/v1/tokens \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "account_id": "aoa_01JEXAMPLE",
+    "capabilities": ["transfer:sgd:max_1000", "balance:read"],
+    "ttl_seconds": 3600
+  }'</code></pre>
+
+<h3>Step 3: Execute a Transfer</h3>
+<pre><code>curl -X POST https://api.agentic.bank/v1/transfers \
+  -H "Authorization: Bearer cap_tok_EXAMPLE" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "from_account": "aoa_01JEXAMPLE",
+    "to_account": "aoa_02JRECIPIENT",
+    "amount": "500.00",
+    "currency": "SGD",
+    "memo": "Payment for compute resources"
+  }'</code></pre>
+
+<h3>Step 4: Check Account Balance</h3>
+<pre><code>curl https://api.agentic.bank/v1/accounts/aoa_01JEXAMPLE/balance \
+  -H "Authorization: Bearer cap_tok_EXAMPLE"</code></pre>
+
+<h3>Step 5: Query Audit Trail</h3>
+<pre><code>curl "https://api.agentic.bank/v1/audit?account_id=aoa_01JEXAMPLE&amp;limit=10" \
+  -H "Authorization: Bearer $API_KEY"</code></pre>
+
+<h3>Error Codes</h3>
+<table>
+<thead><tr><th>Code</th><th>Description</th></tr></thead>
+<tbody>
+<tr><td><code>INVALID_TOKEN</code></td><td>Capability token expired or revoked</td></tr>
+<tr><td><code>INSUFFICIENT_CAPABILITY</code></td><td>Token lacks required capability</td></tr>
+<tr><td><code>RISK_LIMIT_EXCEEDED</code></td><td>Transaction blocked by risk rule</td></tr>
+<tr><td><code>POLICY_DENIED</code></td><td>Policy engine denied the action</td></tr>
+<tr><td><code>INSUFFICIENT_BALANCE</code></td><td>Account has insufficient funds</td></tr>
+<tr><td><code>AML_SCREENING_HOLD</code></td><td>Transaction held for AML review</td></tr>
+</tbody>
+</table>
+
+<!-- 7. WHY SCV x HASHED -->
+<h2 id="partners">6. Why SC Ventures x Hashed</h2>
+<table class="two-col">
+<thead><tr><th>SC Ventures Brings</th><th>Hashed Brings</th></tr></thead>
+<tbody>
+<tr><td>MAS regulatory pathway + sandbox sponsorship</td><td>Deep expertise in blockchain infra and tokenomics</td></tr>
+<tr><td>Pan-Asia banking licenses (SG, HK, UAE)</td><td>Top-tier Web3 network and stablecoin integration playbook</td></tr>
+<tr><td>Enterprise distribution (SC corporate clients)</td><td>Execution speed and AI/Crypto convergence thought leadership</td></tr>
+<tr><td>Venture governance (Zodia/Nexus/Libeara playbook)</td><td>Go-to-market strategies for crypto-native agents</td></tr>
+</tbody>
+</table>
+<p><strong>Operating Model:</strong> Separate legal entity (Zodia archetype). SCV = regulatory / TradFi distribution. Hashed = crypto infra / product execution. Stage-gate governance with clear DRI ownership.</p>
+
+<!-- 8. ENTITY STRUCTURE -->
+<h2 id="entity">7. Entity Structure</h2>
+
+<h3>7.1 Ownership Structure</h3>
+<div class="entity-diagram">
+  <div class="entity-row">
+    <div class="box">
+      <strong>SC Ventures</strong>
+      <div class="label">Standard Chartered Innovation Arm</div>
+    </div>
+    <div class="box">
+      <strong>Hashed</strong>
+      <div class="label">Blockchain &amp; AI Investment</div>
+    </div>
+    <div class="box">
+      <strong>Execution Team</strong>
+      <div class="label">~10% ESOP (Vesting)</div>
+    </div>
+  </div>
+  <div style="font-size:1.5rem;color:var(--gray);margin:.5rem 0">&#8595;</div>
+  <div class="entity-row">
+    <div class="box box-main">
+      <strong>AoaBank Pte. Ltd.</strong>
+      <div class="label">Singapore Private Limited</div>
+      <div style="margin-top:.8rem;font-size:.78rem;color:var(--slate)">
+        Separate Balance Sheet &bull; Own MAS PSA License &bull; Independent Board
+      </div>
+    </div>
+  </div>
+</div>
+
+<h3>7.2 Zodia Archetype Precedents</h3>
+<table>
+<thead><tr><th>Precedent</th><th>Structure</th><th>Equity Split</th><th>Regulatory Status</th></tr></thead>
+<tbody>
+<tr><td>Zodia Custody</td><td>Separate UK Ltd.</td><td>SCV ~90%, Mgmt ~10%</td><td>FCA-registered custodian</td></tr>
+<tr><td>Zodia Markets</td><td>Separate entity</td><td>SCV majority</td><td>FCA-registered, MAS-licensed</td></tr>
+<tr><td>Libeara</td><td>Separate entity</td><td>SCV majority</td><td>HKMA Supervisory Sandbox</td></tr>
+</tbody>
+</table>
+
+<h3>7.3 PSA License Decision: SPI for Phase 1</h3>
+<table>
+<thead><tr><th>Criterion</th><th>Standard (SPI)</th><th>Major (MPI)</th></tr></thead>
+<tbody>
+<tr><td>Monthly txn volume</td><td>&lt; S$3 million</td><td>&ge; S$3 million</td></tr>
+<tr><td>Daily e-money float</td><td>&lt; S$5 million</td><td>&ge; S$5 million</td></tr>
+<tr><td>Base capital</td><td>S$100,000</td><td>S$250,000</td></tr>
+<tr><td>Safeguarding</td><td>Not required</td><td>Mandatory</td></tr>
+<tr><td>Application timeline</td><td>3&ndash;6 months</td><td>6&ndash;12 months</td></tr>
+</tbody>
+</table>
+<div class="callout"><strong>Decision:</strong> Start with SPI. Upgrade to MPI when monthly volumes approach S$2M (67% of threshold). Lead time: 6&ndash;9 months.</div>
+
+<!-- 9. REGULATORY -->
+<h2 id="regulatory">8. Regulatory Strategy</h2>
+
+<h3>8.1 MAS Sandbox Eligibility</h3>
+<table>
+<thead><tr><th>#</th><th>MAS Criterion</th><th>AOA Assessment</th><th>Readiness</th></tr></thead>
+<tbody>
+<tr><td>1</td><td>Genuine innovation</td><td>Machine-native financial accounts with capability delegation &mdash; no direct equivalent exists</td><td><span class="badge badge-green">Ready</span></td></tr>
+<tr><td>2</td><td>Benefit to consumers/industry</td><td>Enables autonomous agent commerce with institutional-grade compliance</td><td><span class="badge badge-green">Ready</span></td></tr>
+<tr><td>3</td><td>Intent to deploy in Singapore</td><td>Singapore is Phase 1 market; Pte. Ltd. entity to be incorporated</td><td><span class="badge badge-green">Ready</span></td></tr>
+<tr><td>4</td><td>Tested within controlled boundaries</td><td>SGD-only, domestic, limited pilots, capped transaction values</td><td><span class="badge badge-green">Ready</span></td></tr>
+<tr><td>5</td><td>Clear exit/transition plan</td><td>Path to SPI license or orderly wind-down documented</td><td><span class="badge badge-yellow">Needs Prep</span></td></tr>
+<tr><td>6</td><td>Adequate risk management</td><td>AML/CFT controls, agent authorization framework, fund safeguarding</td><td><span class="badge badge-yellow">Needs Prep</span></td></tr>
+</tbody>
+</table>
+
+<h3>8.2 End-to-End Timeline</h3>
+<table>
+<thead><tr><th>Phase</th><th>Duration</th><th>Key Actions</th></tr></thead>
+<tbody>
+<tr><td>Pre-Application</td><td>Month 0&ndash;4</td><td>Entity incorporation, document preparation, MAS pre-consultation</td></tr>
+<tr><td>Application &amp; Review</td><td>Month 4&ndash;9</td><td>Formal submission, clarification rounds, MAS assessment</td></tr>
+<tr><td>Sandbox Period</td><td>Month 9&ndash;21</td><td>12-month sandbox operation, mid-point review, exit assessment</td></tr>
+<tr><td>Full License</td><td>Month 21&ndash;28</td><td>SPI license application and approval</td></tr>
+</tbody>
+</table>
+
+<!-- 10. GTM -->
+<h2 id="gtm">9. Execution Plan &amp; Go-to-Market</h2>
+
+<h3>9.1 Go-to-Market Phases</h3>
+<table>
+<thead><tr><th>Phase</th><th>Timeline</th><th>Scope</th></tr></thead>
+<tbody>
+<tr><td><strong>Phase 1</strong></td><td>Month 0&ndash;8</td><td>Singapore &mdash; MAS Sandbox. SGD + Stablecoin domestic. 3 pilot customers from SC network + Hashed portfolio.</td></tr>
+<tr><td><strong>Phase 2</strong></td><td>Month 9&ndash;18</td><td>Hong Kong + UAE expansion. Multi-currency + deep on-chain integration. 20+ enterprise customers.</td></tr>
+</tbody>
+</table>
+
+<h3>9.2 Pricing</h3>
+<table>
+<thead><tr><th>Tier</th><th>Price</th><th>Includes</th></tr></thead>
+<tbody>
+<tr><td>Free</td><td>$0/mo</td><td>100 txns/month, basic AOA</td></tr>
+<tr><td>Pro</td><td>Custom</td><td>Unlimited txns, premium risk models, SLA</td></tr>
+</tbody>
+</table>
+
+<h3>9.3 4-Wave Execution Strategy</h3>
+<table>
+<thead><tr><th>Wave</th><th>Timeline</th><th>Focus</th><th>Tasks</th></tr></thead>
+<tbody>
+<tr><td><strong>Wave 1</strong></td><td>Month 0&ndash;2</td><td>Foundation + Entity</td><td>Charter, Entity, Scaffold, Types, Ledger, KYA, Capability, Decision Records</td></tr>
+<tr><td><strong>Wave 2</strong></td><td>Month 2&ndash;5</td><td>Core Modules</td><td>Policy Engine, Wallet, Signing, Risk, Idempotency, Settlement, Bot, Gateway, Pipeline UX</td></tr>
+<tr><td><strong>Wave 3</strong></td><td>Month 5&ndash;8</td><td>Integration + Compliance</td><td>E2E Flow, AML, Travel Rule, Disputes, Recon, Dashboard, Maturity UX, Privacy</td></tr>
+<tr><td><strong>Wave 4</strong></td><td>Month 8&ndash;12</td><td>Launch + Scale</td><td>MAS Evidence, Security Audit, Pilot Onboarding, Load Test, GTM Materials, Pricing Engine</td></tr>
+</tbody>
+</table>
+<div class="callout"><strong>Critical Path:</strong> Scaffold &rarr; Ledger &rarr; Capability &rarr; Policy &rarr; Idempotency &rarr; E2E Integration &rarr; Reconciliation &rarr; Pilot Onboarding</div>
+
+<h3>9.4 Milestones</h3>
+<table>
+<thead><tr><th>Milestone</th><th>Timeline</th><th>Status</th></tr></thead>
+<tbody>
+<tr><td>Operating Charter signed</td><td>Month 0</td><td><span class="badge badge-green">Ready</span></td></tr>
+<tr><td>Entity incorporation (SG)</td><td>Month 1</td><td><span class="badge badge-green">Ready</span></td></tr>
+<tr><td>MVP: E2E agent payment flow</td><td>Month 5</td><td><span class="badge badge-blue">Architecture Complete</span></td></tr>
+<tr><td>MAS sandbox application</td><td>Month 6</td><td><span class="badge badge-yellow">Requirements Analyzed</span></td></tr>
+<tr><td>3 pilot customers live</td><td>Month 10</td><td><span class="badge badge-yellow">SC + Hashed Pipeline</span></td></tr>
+<tr><td>Series A readiness</td><td>Month 12</td><td>Revenue + regulatory traction</td></tr>
+</tbody>
+</table>
+
+<!-- 11. THE ASK -->
+<h2 id="ask">10. The Ask</h2>
+<p><strong>Joint venture formation</strong> between SC Ventures and Hashed to build AOA as a standalone entity.</p>
+<ul>
+  <li><strong>Capital:</strong> $3&ndash;5M seed (SCV + Hashed co-invest)</li>
+  <li><strong>Regulatory:</strong> MAS sandbox sponsorship via SC banking license</li>
+  <li><strong>Distribution:</strong> 3 pilot enterprise introductions from SC corporate network + Hashed portfolio companies</li>
+  <li><strong>Blockchain Infra:</strong> Stablecoin rail integration and on-chain settlement architecture from Hashed ecosystem</li>
+  <li><strong>Timeline:</strong> 12-month build to commercial launch</li>
+</ul>
+
+<!-- 12. WHY NOW -->
+<h2 id="why-now">11. Why Now</h2>
+<ol>
+  <li><strong>Agent adoption is accelerating</strong> &mdash; OpenAI, Anthropic, Google all shipping agent frameworks in 2025&ndash;2026</li>
+  <li><strong>Regulators are moving</strong> &mdash; MAS, HKMA, VARA all have sandbox programs; first-mover regulatory advantage</li>
+  <li><strong>No incumbent solution</strong> &mdash; traditional banks don't have machine-native products; fintechs lack banking licenses</li>
+  <li><strong>Stablecoin rails are production-ready</strong> &mdash; USDC/USDT on major chains provide instant, 24/7 cross-border settlement infrastructure</li>
+  <li><strong>SC Ventures + Hashed have the playbook</strong> &mdash; Zodia, Nexus, Libeara prove the SCV model works; Hashed brings crypto-native execution</li>
+</ol>
+
+</div><!-- .content -->
+</div><!-- .main -->
+
+<footer>
+  Confidential &mdash; Prepared for SC Ventures x Hashed &bull; March 2026 &bull; AoaBank Pte. Ltd. (in-incorporation)
+</footer>
+
+</body>
+</html>

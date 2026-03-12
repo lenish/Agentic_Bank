@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "dev": "bun run src/server.ts",
     "build": "bun build src/index.ts --outdir dist --target bun && tsc --emitDeclarationOnly",
     "test": "bun test",
     "lint": "tsc --noEmit",
@@ -16,6 +17,12 @@
     "bun-types": "latest"
   },
   "dependencies": {
-    "hono": "4.12.7"
+    "hono": "4.12.7",
+    "@aoa/kya": "workspace:*",
+    "@aoa/policy": "workspace:*",
+    "@aoa/risk": "workspace:*",
+    "@aoa/settlement": "workspace:*",
+    "@aoa/ledger": "workspace:*",
+    "@aoa/compliance": "workspace:*"
   }
 }

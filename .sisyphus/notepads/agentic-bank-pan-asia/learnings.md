@@ -315,3 +315,15 @@
 - NPS validation: integer 0-10 only; `generatePilotReport()` computes average NPS with null when no feedback exists.
 - 16 new tests (exceeds 8 minimum): api-gateway now at 53 tests total. Build: 77.20 KB (34 modules).
 - Docs: onboarding-guide.md covers 6-step lifecycle (account → KYA → capability → payment → verification → feedback); feedback template has NPS + 3 CSAT + open comments.
+
+## [2026-03-12] Task 28 — Security Audit & Penetration Test
+- `bun audit` returned 0 vulnerabilities across all packages.
+- Secret scan (grep for password/secret/api_key/private_key): 17 matches in 5 files — ALL legitimate usage (function parameters, test fixtures, Bearer token handling). Zero hardcoded secrets.
+- Anti-pattern scan (`as any`, `@ts-ignore`, `eval(`): 1 match in test file only (`compliance/src/index.test.ts:105` — `as any` for testing immutability guard). Zero in production code.
+- `console.log` scan: 0 matches in production code — no PII leak via logging.
+- `.env.tpl`: All 4 values use `op://Server-Secrets/...` references exclusively. Clean.
+- OWASP API Security Top 10 (API1-API10): ALL PASS. Multi-layer defense (auth → capability → policy → risk → settlement) covers every OWASP category.
+- 4 penetration test scenarios ALL DEFENDED: (1) Auth bypass → 401, (2) Cross-agent IDOR → 403, (3) Expired capability → 403, (4) Rate limit → 429.
+- Phase 2 security notes: upgrade HS256→RS256 with HSM, mTLS via SPIFFE/SPIRE, PostgreSQL RLS, API deprecation policy.
+- Rate limiter keys by IP (x-forwarded-for / x-real-ip), not by agent identity — acceptable for Phase 1 since all routes require auth.
+- `timingSafeEqual` used in SVID signature verification (identity.ts:132) — prevents timing side-channel attacks.
