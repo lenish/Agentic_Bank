@@ -1,0 +1,64 @@
+============================================================
+TASK 10: Agent Wallet/Sub-Account Service — Evidence
+============================================================
+Date: 2026-03-12
+Status: PASS
+
+## Files Created/Modified
+- packages/ledger/src/wallet.ts — AgentWalletService class (185 lines)
+- packages/ledger/src/wallet.test.ts — 10 tests
+- packages/ledger/src/index.ts — added exports for AgentWalletService, SubAccountRecord
+
+## AgentWalletService API
+- createSubAccount(agentId, masterAccountId, purpose, limitSgdCents) → SubAccountRecord
+- allocateFunds(masterAccountId, subAccountId, amountSgdCents) → ledger tx
+- recallFunds(subAccountId, masterAccountId, amountSgdCents) → ledger tx
+- spendFromSubAccount(subAccountId, counterpartyAccountId, amountSgdCents, purpose) → ledger tx
+- getSubAccountsByAgent(agentId) → SubAccountRecord[]
+- getSubAccountsByPurpose(purpose) → SubAccountRecord[]
+- freezeSubAccount(subAccountId) → SubAccountRecord
+- unfreezeSubAccount(subAccountId) → SubAccountRecord
+
+## Test Results (bun run test --filter=@aoa/ledger)
+18 pass, 0 fail, 53 expect() calls
+Ran 18 tests across 2 files [104.00ms]
+
+Existing tests (8):
+  ✓ LedgerService > debit+credit pair creates balanced entries (sum=0)
+  ✓ LedgerService > A→B transfer decrements A, increments B, and trial balance holds
+  ✓ LedgerService > direct UPDATE is blocked; use compensating entry
+  ✓ LedgerService > SERIALIZABLE concurrent transfers preserve consistency
+  ✓ LedgerService > point-in-time balance query returns historical value
+  ✓ LedgerService > compensating entry reverses prior transaction without updates
+  ✓ TransactionStateMachine > valid transitions succeed
+  ✓ TransactionStateMachine > invalid transitions throw
+
+New tests (10):
+  ✓ AgentWalletService > createSubAccount creates sub-account with correct metadata
+  ✓ AgentWalletService > allocateFunds moves funds from master to sub-account
+  ✓ AgentWalletService > allocateFunds rejects when allocation would exceed limit
+  ✓ AgentWalletService > recallFunds moves funds from sub-account back to master
+  ✓ AgentWalletService > spendFromSubAccount creates ledger entry with purpose metadata
+  ✓ AgentWalletService > freezeSubAccount blocks spend and allocation
+  ✓ AgentWalletService > unfreezeSubAccount re-enables operations
+  ✓ AgentWalletService > getSubAccountsByAgent returns only matching agent sub-accounts
+  ✓ AgentWalletService > getSubAccountsByPurpose returns only matching purpose sub-accounts
+  ✓ AgentWalletService > QA scenario: full lifecycle with limit enforcement and ledger verification
+
+## Build Results (bun run build --filter=@aoa/ledger)
+Bundled 6 modules in 7ms → dist/index.js (14.33 KB)
+tsc --emitDeclarationOnly: success
+
+## Acceptance Criteria Verification
+✓ Sub-account CRUD works (createSubAccount, getSubAccountsByAgent/Purpose)
+✓ Balance limit exceeded → allocation rejected ("Allocation would exceed sub-account limit")
+✓ Frozen account withdrawal attempt → blocked ("Sub-account is frozen")
+✓ All fund movements recorded as ledger entries (trial balance = 0)
+✓ Purpose tagging query works (getSubAccountsByPurpose)
+
+## QA Scenario Verified
+1. Master account funded with 10,000 SGD (1,000,000 cents) ✓
+2. Agent sub-account created (limit: 2,000 SGD = 200,000 cents) ✓
+3. Allocate 2,000 SGD → success, balance = 200,000 ✓
+4. Allocate additional 500 SGD → limit exceeded rejection ✓
+5. Spend 1,000 SGD from sub-account → ledger entry verified, trial balance = 0 ✓

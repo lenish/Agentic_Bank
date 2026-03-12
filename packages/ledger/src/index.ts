@@ -12,3 +12,5 @@ export {
   TransactionStateMachine,
   TransactionStatus,
 } from "./state-machine";
+export { AgentWalletService } from "./wallet";
+export type { SubAccountRecord } from "./wallet";

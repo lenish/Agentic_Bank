@@ -112,3 +112,11 @@
 - In-memory policy store follows Phase 1 pattern (Map) and includes TODO marker for PostgreSQL migration.
 
 - Correction: the earlier Task 9 bullet block at lines 100-105 was shell-interpolation-corrupted; canonical Task 9 notes are lines 107-112.
+
+## [2026-03-12] Task 10 — Agent Wallet/Sub-Account Service
+- AgentWalletService wraps AccountService + LedgerService + InMemoryLedgerStore (3 deps injected via constructor).
+- SubAccountRecord is pure metadata (accountId, agentId, masterAccountId, purpose, limitSgdCents); frozen status delegates to AccountRecord via store.getAccount().
+- Balance limit enforcement: check ledgerService.getBalance() before createEntry in allocateFunds. Not atomic with ledger write in Phase 1 (TODO for PostgreSQL serializable tx).
+- Frozen checks use assertNotFrozen() for early rejection with specific error ("Sub-account is frozen") before delegating to LedgerService which also rejects frozen accounts generically.
+- All fund movements use metadata tagging: { type: "allocation"|"recall"|"spend", purpose: string }.
+- 10 tests written (exceeds 8 minimum). QA scenario covers full lifecycle: fund master → create sub → allocate → over-limit reject → spend → verify trial balance = 0.
