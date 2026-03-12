@@ -20,6 +20,19 @@ export { piiMaskMiddleware, maskPiiFields } from "./middleware/pii-mask";
 export { validateMiddleware } from "./middleware/validate";
 export type { ValidationSchema, ValidationIssue } from "./middleware/validate";
 
+// Pilot Onboarding
+export { PilotOnboardingService, PILOT_CUSTOMERS } from "./onboarding";
+export type {
+  PilotCustomer,
+  AgentSubAccount,
+  MasterAccount,
+  OnboardingResult,
+  OnboardingStatus,
+  TransactionRecord,
+  FeedbackRecord,
+  PilotReport,
+} from "./onboarding";
+
 // Pricing / Billing
 export { PricingEngine, createBillingRoutes } from "./pricing";
 export {

@@ -1,0 +1,58 @@
+Task 29: Pilot Customer Onboarding and Go-Live — Evidence
+==========================================================
+
+Date: 2026-03-12
+Package: @aoa/api-gateway
+
+## Files Created
+- packages/api-gateway/src/onboarding.ts — PilotOnboardingService
+- packages/api-gateway/src/onboarding.test.ts — 16 tests
+- docs/pilot/onboarding-guide.md — Step-by-step enterprise onboarding guide
+- docs/pilot/pilot-feedback-template.md — NPS/CSAT feedback template
+
+## Files Modified
+- packages/api-gateway/src/index.ts — Added onboarding exports
+
+## PilotOnboardingService API
+- onboardCustomer(customerId) — creates master + 2 agent sub-accounts
+- recordTransaction(customerId, agentId, amountCents) — records completed txn
+- getOnboardingStatus(customerId) — PENDING | ACTIVE | COMPLETED
+- collectFeedback(customerId, nps, comment) — NPS 0-10
+- generatePilotReport() — summary across all pilot customers
+
+## 3 Pilot Customers (SC Ventures Network)
+- pilot-001: TechCorp Singapore (FREE tier, SG)
+- pilot-002: FinanceHub Asia (FREE tier, SG)
+- pilot-003: TradeFlow Pte Ltd (FREE tier, SG)
+
+## Test Results
+- Total tests: 53 pass, 0 fail (37 existing + 16 new)
+- 203 expect() calls
+- New onboarding tests: 16 (exceeds 8 minimum)
+
+Test breakdown:
+- onboardCustomer: 4 tests (happy path, all 3 customers, idempotent, unknown ID)
+- recordTransaction: 4 tests (happy path, not onboarded, unknown agent, invalid amount)
+- getOnboardingStatus: 3 tests (PENDING, ACTIVE, auto-COMPLETED)
+- collectFeedback: 3 tests (happy path, out-of-range NPS, not onboarded)
+- generatePilotReport: 2 tests (empty report, full lifecycle with 3 customers)
+
+## Build Results
+- bun run build --filter=@aoa/api-gateway: SUCCESS
+- Bundle: 77.20 KB (34 modules)
+- tsc --emitDeclarationOnly: clean (no type errors)
+
+## Verification Checklist
+[x] PilotOnboardingService with in-memory Map stores
+[x] 3 pilot customers defined with correct IDs, names, FREE tier
+[x] Master account + 2 agent sub-accounts per customer
+[x] onboardCustomer, recordTransaction, getOnboardingStatus, collectFeedback, generatePilotReport
+[x] All amounts in SGD cents (integer)
+[x] No `any` types (strict TypeScript)
+[x] No new npm dependencies
+[x] No external API calls (in-memory simulation)
+[x] Onboarding guide: account creation → KYA → capability → first payment
+[x] Feedback template: NPS + 3 CSAT questions + open comments
+[x] 16 tests (≥8 minimum met)
+[x] All 53 tests pass
+[x] Build exits 0
