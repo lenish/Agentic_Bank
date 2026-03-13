@@ -84,6 +84,7 @@ export function Partnership() {
             </ul>
           </div>
         </div>
+
       </div>
     </section>
   );

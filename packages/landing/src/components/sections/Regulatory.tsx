@@ -80,6 +80,7 @@ export function Regulatory() {
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );
