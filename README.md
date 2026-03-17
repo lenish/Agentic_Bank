@@ -1,140 +1,73 @@
-# AOA — Agent Operating Account
+# Agentic_Bank
 
-Bank-grade financial infrastructure for autonomous AI agents. Purpose-built for enterprises deploying agents that need to spend, settle, and comply — with full audit trails.
+Planning and strategy repository for the Agentic_Bank / AOA venture concept.
 
-**Joint venture**: SC Ventures × Hashed
-
-> **Pitch Deck**: [aoa-pitch.vercel.app](https://aoa-pitch.vercel.app)
+This repository now keeps the venture's core documents, regulatory planning materials, GTM assets, and execution evidence. Product code and infrastructure scaffolding have been removed so the project can be rebuilt from first principles.
 
 ---
 
-## What is AOA?
+## What Lives Here
 
-Every enterprise is deploying autonomous AI agents. These agents need to spend money, settle invoices, manage budgets, and comply with regulations — but no bank offers an account designed for machines.
-
-AOA is the **trust layer** between enterprise AI and the financial system: per-agent sub-accounts with policy-bound spending, real-time risk scoring, and automated settlement via API + messenger.
-
----
-
-## Architecture: 8-Layer Agentic Banking Stack
-
-| Layer | Function | Package |
-|-------|----------|---------|
-| **KYA Identity** | SPIFFE ID + mTLS — machine-native identity | `@aoa/kya` |
-| **Capability Delegation** | Bounded tokens: action, amount, TTL, counterparty | `@aoa/shared-types` |
-| **Policy Engine** | OPA/Cedar deny-by-default rules | `@aoa/policy` |
-| **Risk Scoring** | 15 pre-trade rules, <100ms p95 | `@aoa/risk` |
-| **Ledger** | Double-entry, isolated per-agent sub-accounts | `@aoa/ledger` |
-| **Settlement** | State machine + fiat/stablecoin rail adapters | `@aoa/settlement` |
-| **Dispute / Recon** | Auto-accept <$50, SLA tracking, daily recon | `@aoa/compliance` |
-| **Compliance** | Osprey AML + IVMS101 Travel Rule adapter | `@aoa/compliance` |
+- `docs/` — strategy, governance, regulatory, GTM, operations, and pitch materials
+- `.sisyphus/` — plans, decision notes, issues, and execution evidence
+- `README.md` — repository overview
 
 ---
 
-## Monorepo Structure
+## Key Document Areas
 
-```
-agentic-bank/
-├── packages/
-│   ├── api-gateway/       # @aoa/api-gateway — REST/gRPC entry point
-│   ├── compliance/        # @aoa/compliance — AML, Travel Rule, dispute/recon
-│   ├── dashboard/         # @aoa/dashboard — Operator web dashboard
-│   ├── kya/               # @aoa/kya — Know Your Agent identity service
-│   ├── landing/           # @agentic-bank/landing — Next.js marketing site
-│   ├── ledger/            # @aoa/ledger — Double-entry ledger core
-│   ├── messenger-bot/     # @aoa/messenger-bot — Telegram/Slack interface
-│   ├── policy/            # @aoa/policy — OPA/Cedar policy engine
-│   ├── risk/              # @aoa/risk — Real-time risk scoring
-│   ├── settlement/        # @aoa/settlement — Fiat + stablecoin settlement
-│   └── shared-types/      # @aoa/shared-types — Shared TypeScript types
-├── docs/
-│   ├── pitch/             # Investor pitch site (deployed to Vercel)
-│   └── investment-memo-scv.md
-├── resource/              # SVG/PNG diagrams, logos
-├── docker-compose.yml     # Local infra (Postgres, Redis, Redpanda)
-├── openapi.yaml           # API specification (OpenAPI 3.1)
-├── turbo.json             # Turborepo task config
-└── tsconfig.base.json     # Shared TypeScript config
-```
+### Governance
 
----
+- `docs/governance/operating-charter.md`
+- `docs/governance/internal-strategy-memo.md`
 
-## Tech Stack
+### Regulatory
 
-| Category | Technology |
-|----------|-----------|
-| **Runtime** | [Bun](https://bun.sh) 1.2.4 |
-| **Language** | TypeScript 5.7 (strict, ES2022) |
-| **Monorepo** | Bun Workspaces + [Turborepo](https://turbo.build) |
-| **Database** | PostgreSQL 16 |
-| **Cache** | Redis 7 |
-| **Streaming** | [Redpanda](https://redpanda.com) (Kafka-compatible) |
-| **Identity** | SPIFFE/SPIRE + mTLS |
-| **Policy** | OPA / Cedar |
-| **AML** | Osprey + IVMS101 |
-| **Frontend** | Next.js (landing), React (dashboard) |
-| **API Spec** | OpenAPI 3.1 |
+- `docs/regulatory/mas-sandbox-application.md`
+- `docs/regulatory/control-matrix.md`
+- `docs/regulatory/entity-structure.md`
+- `docs/regulatory/evidence-index.md`
+
+### GTM
+
+- `docs/gtm/one-pager.md`
+- `docs/gtm/datasheet.md`
+- `docs/gtm/internal-exec-summary.md`
+- `docs/gtm/internal-slide-outline.md`
+
+### Execution Planning
+
+- `.sisyphus/plans/agentic-bank-pan-asia.md`
+- `.sisyphus/notepads/agentic-bank-pan-asia/decisions.md`
+- `.sisyphus/notepads/agentic-bank-pan-asia/learnings.md`
+- `.sisyphus/notepads/agentic-bank-pan-asia/issues.md`
 
 ---
 
-## Getting Started
+## Current State
 
-### Prerequisites
-
-- [Bun](https://bun.sh) ≥ 1.2.4
-- [Docker](https://docs.docker.com/get-docker/) (for local infra)
-
-### Setup
-
-```bash
-# Clone
-git clone https://github.com/lenish/Agentic_Bank.git
-cd Agentic_Bank
-
-# Install dependencies
-bun install
-
-# Start local infrastructure (Postgres, Redis, Redpanda)
-docker compose up -d
-
-# Run all packages in dev mode
-bun run dev
-
-# Build all packages
-bun run build
-
-# Run tests
-bun run test
-
-# Lint
-bun run lint
-
-# Type check
-bun run typecheck
-```
+- Product source code removed
+- Build and deployment scaffolding removed
+- Planning and documentation retained
+- Repository positioned for venture refinement before rebuild
 
 ---
 
-## GTM Strategy
+## Suggested Reading Order
 
-| Wave | Timeline | Focus |
-|------|----------|-------|
-| **Wave 1** | Month 0–6 | Singapore MAS sandbox entry, KYA + Ledger core |
-| **Wave 2** | Month 7–12 | Policy + Risk engine, first enterprise pilots |
-| **Wave 3** | Month 13–18 | Settlement rails (fiat + stablecoin), compliance |
-| **Wave 4** | Month 19+ | Pan-Asia expansion (HK, UAE, Japan) |
+1. `docs/governance/internal-strategy-memo.md`
+2. `docs/gtm/internal-exec-summary.md`
+3. `docs/regulatory/mas-sandbox-application.md`
+4. `.sisyphus/plans/agentic-bank-pan-asia.md`
 
 ---
 
-## Regulatory
+## Purpose
 
-- **Target**: MAS Payment Services Act (PSA) license via sandbox pathway
-- **Compliance**: Designed for MAS sandbox-readiness
-- **AML/CFT**: Osprey integration + IVMS101 Travel Rule
-- **Identity**: Machine-native KYA (Know Your Agent) framework
+Use this repository to align on:
 
----
-
-## License
-
-Proprietary. All rights reserved.
+- venture structure
+- regulatory strategy
+- product thesis
+- GTM sequencing
+- execution priorities before a fresh product rebuild
