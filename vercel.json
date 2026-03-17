@@ -1,9 +1,0 @@
-{
-  "buildCommand": null,
-  "installCommand": null,
-  "outputDirectory": ".",
-  "rewrites": [
-    { "source": "/", "destination": "/docs/pitch/index.html" },
-    { "source": "/pitch", "destination": "/docs/pitch/index.html" }
-  ]
-}
